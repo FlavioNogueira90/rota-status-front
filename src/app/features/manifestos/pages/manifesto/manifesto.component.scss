@@ -1,0 +1,236 @@
+:host {
+  display: block;
+  background: #f6f7fb;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #101828;
+}
+
+.page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #667085;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+  margin-bottom: 16px;
+}
+
+.search__row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.field {
+  min-width: 260px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  color: #667085;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  padding: 0 12px;
+  outline: none;
+  background: #fff;
+}
+
+.input:focus {
+  border-color: #6172f3;
+  box-shadow: 0 0 0 4px rgba(97, 114, 243, 0.15);
+}
+
+.btn {
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 14px;
+  background: #1f3cff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn:hover { filter: brightness(0.95); }
+
+.error {
+  margin-top: 10px;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.manifesto__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.kpis {
+  display: flex;
+  gap: 12px;
+}
+
+.kpi {
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  min-width: 150px;
+  background: #fcfcfd;
+}
+
+.kpi__label { color: #667085; font-size: 12px; }
+.kpi__value { font-size: 18px; font-weight: 800; margin-top: 2px; }
+
+.progress {
+  height: 10px;
+  background: #eef2ff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px 0 10px;
+  border: 1px solid #e0e7ff;
+}
+
+.progress__bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 280ms ease;
+  background: linear-gradient(90deg, #1f3cff, #45c2ff);
+}
+
+.progress__bar--zero {
+  background: #d0d5dd;
+}
+
+.progress__bar--full {
+  background: linear-gradient(90deg, #12b76a, #039855);
+}
+
+
+.times {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.muted { color: #667085; }
+.strong { font-weight: 700; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+.grid__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  h3 { margin: 0; }
+}
+
+.hint { color: #667085; font-size: 12px; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+
+  th, td {
+    text-align: left;
+    padding: 12px 12px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: middle;
+  }
+
+  thead th {
+    font-size: 12px;
+    color: #667085;
+    font-weight: 800;
+    background: #fafbff;
+  }
+}
+
+.col-num { width: 70px; }
+.col-status { width: 170px; }
+
+.row {
+  cursor: pointer;
+}
+
+.row:hover {
+  background: #f6f8ff;
+}
+
+.badge, .pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid transparent;
+}
+
+.empty {
+  padding: 14px;
+  color: #667085;
+  font-size: 14px;
+  border: 1px dashed #d0d5dd;
+  border-radius: 12px;
+  background: #fcfcfd;
+  margin-top: 10px;
+}
+
+
+/* manifesto badge */
+.badge--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
+.badge--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
+.badge--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
+.badge--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
+.badge--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }
+
+/* entrega pill */
+.pill--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
+.pill--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
+.pill--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
+.pill--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
+.pill--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }

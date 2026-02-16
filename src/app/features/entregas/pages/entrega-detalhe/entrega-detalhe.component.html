@@ -1,0 +1,77 @@
+<div class="page">
+  <div class="top">
+    <button class="btn" (click)="voltar()">← Voltar</button>
+
+    <div class="title">
+      <h1>Detalhe da Entrega</h1>
+      <p class="subtitle">Manifesto #{{ numeroManifesto }} • Entrega #{{ numeroEntrega }}</p>
+    </div>
+  </div>
+
+  <section class="card" *ngIf="entrega$ | async as e; else notFound">
+    <div class="header">
+      <div>
+        <h2>{{ e.clienteNome }}</h2>
+        <p class="muted">{{ e.endereco }}</p>
+      </div>
+
+      <span class="pill" [ngClass]="pillClass(e.status)">{{ e.status }}</span>
+    </div>
+
+    <div class="grid">
+      <div class="info">
+        <div class="label">Iniciada em</div>
+        <div class="value">{{ formatarData(e.iniciadaEm) }}</div>
+      </div>
+
+      <div class="info">
+        <div class="label">Chegada no cliente</div>
+        <div class="value">{{ formatarData(e.chegadaEm) }}</div>
+      </div>
+
+      <div class="info">
+        <div class="label">Concluída em</div>
+        <div class="value">{{ formatarData(e.concluidaEm) }}</div>
+      </div>
+
+      <div class="info">
+        <div class="label">Motivo devolução</div>
+        <div class="value">{{ e.motivoDevolucao || '-' }}</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="step">
+        <div class="dot"></div>
+        <div>
+          <div class="step__title">Início</div>
+          <div class="muted">{{ formatarData(e.iniciadaEm) }}</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot"></div>
+        <div>
+          <div class="step__title">Chegada</div>
+          <div class="muted">{{ formatarData(e.chegadaEm) }}</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot"></div>
+        <div>
+          <div class="step__title">Conclusão</div>
+          <div class="muted">{{ formatarData(e.concluidaEm) }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ng-template #notFound>
+    <section class="card">
+      <h2>Entrega não encontrada</h2>
+      <p class="muted">Não foi possível localizar a entrega #{{ numeroEntrega }} neste manifesto.</p>
+      <button class="btn" (click)="voltar()">Voltar</button>
+    </section>
+  </ng-template>
+</div>

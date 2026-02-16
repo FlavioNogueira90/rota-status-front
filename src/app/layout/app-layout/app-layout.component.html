@@ -1,0 +1,72 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand__logo">RS</div>
+      <div class="brand__text">
+        <div class="brand__title">Rota Status</div>
+        <div class="brand__subtitle">Operador</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav__section">MONITORAMENTO</div>
+
+      <a
+        class="nav__item"
+        routerLink="/manifestos"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span class="dot"></span>
+        Buscar Manifesto
+      </a>
+
+      <div class="nav__section">CADASTROS</div>
+
+      <a class="nav__item is-disabled" title="Em breve">
+        <span class="dot"></span>
+        Motoristas
+      </a>
+
+      <a class="nav__item is-disabled" title="Em breve">
+        <span class="dot"></span>
+        Veículos
+      </a>
+
+      <a
+        class="nav__item"
+        routerLink="/manifestos/novo"
+        routerLinkActive="is-active"
+      >
+        <span class="dot"></span>
+        Novo Manifesto
+      </a>
+
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="footer__line"></div>
+      <div class="footer__text">
+        <div class="muted">Ambiente</div>
+        <b>Local</b>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__title">Painel do Operador</div>
+        <div class="topbar__hint">Acompanhe manifestos e entregas em tempo real.</div>
+      </div>
+
+      <div class="topbar__right">
+        <span class="pill pill--ok">Backend online</span>
+      </div>
+    </header>
+
+    <section class="content">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

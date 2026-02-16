@@ -1,0 +1,106 @@
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 6px 0 24px;
+}
+
+.top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.title h1 { margin: 0; font-size: 22px; }
+.subtitle { margin: 4px 0 0; color: #667085; }
+
+.btn {
+  height: 38px;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  padding: 0 12px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  margin-top: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.header h2 { margin: 0; }
+.muted { color: #667085; margin: 6px 0 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info {
+  border: 1px solid #eef2f6;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fcfcfd;
+}
+
+.label { color: #667085; font-size: 12px; font-weight: 800; }
+.value { margin-top: 6px; font-weight: 800; }
+
+.timeline {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #1f3cff;
+  margin-top: 4px;
+}
+
+.step__title { font-weight: 900; }
+
+/* status pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  border: 1px solid transparent;
+}
+
+.pill--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
+.pill--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
+.pill--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
+.pill--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
+.pill--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }

@@ -1,0 +1,87 @@
+<div class="page">
+  <div class="header">
+    <div>
+      <h1>Novo Manifesto</h1>
+      <p class="subtitle">Crie um manifesto e suas entregas para iniciar o monitoramento.</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--ghost" type="button" (click)="preencherExemplo()">Preencher exemplo</button>
+      <button class="btn" type="button" (click)="salvar()" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : 'Salvar manifesto' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid">
+      <div class="field">
+        <label class="label">Número do Manifesto</label>
+        <input class="input" type="number" [(ngModel)]="form.numeroManifesto" placeholder="Ex: 9100" />
+      </div>
+
+      <div class="field">
+        <label class="label">Motorista ID</label>
+        <input class="input" [(ngModel)]="form.motoristaId" placeholder="Ex: MOT-001" />
+      </div>
+
+      <div class="field">
+        <label class="label">Placa do veículo</label>
+        <input class="input" [(ngModel)]="form.veiculoPlaca" placeholder="Ex: FAN1A23" />
+      </div>
+    </div>
+
+    <p *ngIf="erro" class="error">{{ erro }}</p>
+    <p *ngIf="sucesso" class="success">{{ sucesso }}</p>
+  </div>
+
+  <div class="card">
+    <div class="tableHeader">
+      <h2>Entregas</h2>
+      <button class="btn btn--ghost" type="button" (click)="adicionarEntrega()">+ Adicionar entrega</button>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="colNum">Nº</th>
+          <th>Cliente</th>
+          <th>Endereço</th>
+          <th class="colActions"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let e of form.entregas; let i = index">
+          <td class="mono">
+            <input class="input input--mini" type="number" [(ngModel)]="e.numero" />
+          </td>
+
+          <td>
+            <input class="input" [(ngModel)]="e.clienteNome" placeholder="Nome do cliente" />
+          </td>
+
+          <td>
+            <input class="input" [(ngModel)]="e.endereco" placeholder="Endereço completo" />
+          </td>
+
+          <td class="actionsCell">
+            <button
+              class="iconBtn"
+              type="button"
+              (click)="removerEntrega(i)"
+              [disabled]="form.entregas.length <= 1"
+              title="Remover entrega"
+            >
+              ✕
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footerHint">
+      Dica: a numeração das entregas pode ser ajustada, mas não pode repetir.
+    </div>
+  </div>
+</div>

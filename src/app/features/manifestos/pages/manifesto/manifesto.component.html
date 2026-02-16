@@ -1,0 +1,115 @@
+<div class="page">
+  <header class="page__header">
+    <div>
+      <h1>Monitoramento — Buscar Manifesto</h1>
+      <p class="subtitle">
+        Informe o número do manifesto para acompanhar o andamento das entregas.
+      </p>
+    </div>
+  </header>
+
+  <section class="card search">
+    <div class="search__row">
+      <div class="field">
+        <label class="label">Manifesto nº</label>
+        <input
+          class="input"
+          [(ngModel)]="numeroManifesto"
+          placeholder="Ex: 9100"
+          (keyup.enter)="carregar()"
+        />
+      </div>
+
+      <button class="btn" (click)="carregar()">Buscar</button>
+    </div>
+
+    <p *ngIf="erro" class="error">{{ erro }}</p>
+  </section>
+
+  <!-- RESUMO DO MANIFESTO -->
+  <section *ngIf="manifesto$ | async as m" class="card manifesto">
+    <div class="manifesto__top">
+      <div>
+        <h2>Manifesto #{{ m.numeroManifesto }}</h2>
+
+        <div class="meta">
+          <span class="badge" [ngClass]="badgeClass(m.status)">{{ m.status }}</span>
+
+          <span class="muted">Motorista:</span>
+          <b>{{ m.motoristaId }}</b>
+
+          <span class="muted">Placa:</span>
+          <b>{{ m.veiculoPlaca }}</b>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi__label">Entregas</div>
+          <div class="kpi__value">{{ m.entregasConcluidas }}/{{ m.totalEntregas }}</div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi__label">Concluído</div>
+          <div class="kpi__value">{{ m.percentualConcluido }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress__bar"
+        [ngClass]="{
+          'progress__bar--zero': m.percentualConcluido === 0,
+          'progress__bar--full': m.percentualConcluido === 100
+        }"
+        [style.width.%]="m.percentualConcluido"
+      ></div>
+    </div>
+
+
+    <div class="times">
+      <div><span class="muted">Início:</span> <b>{{ formatarData(m.inicioEm) }}</b></div>
+      <div><span class="muted">Fim:</span> <b>{{ formatarData(m.fimEm) }}</b></div>
+    </div>
+  </section>
+
+  <!-- GRID ENXUTA DE ENTREGAS -->
+  <section *ngIf="entregas$ | async as entregas" class="card grid">
+    <div class="grid__header">
+      <h3>Entregas</h3>
+      <span class="hint">Duplo clique em uma entrega para ver detalhes</span>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-num">Nº</th>
+          <th>Cliente</th>
+          <th>Endereço</th>
+          <th class="col-status">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let e of entregas"
+          (dblclick)="abrirDetalhe(e)"
+          class="row"
+          title="Duplo clique para ver detalhes"
+        >
+          <td class="mono">{{ e.numero }}</td>
+          <td class="strong">{{ e.clienteNome }}</td>
+          <td class="muted">{{ e.endereco }}</td>
+          <td>
+            <span class="pill" [ngClass]="pillClass(e.status)">{{ e.status }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="entregas.length === 0" class="empty">
+      Nenhuma entrega encontrada para este manifesto.
+    </div>
+
+  </section>
+</div>
