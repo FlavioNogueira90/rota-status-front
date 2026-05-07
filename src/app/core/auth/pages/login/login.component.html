@@ -1,0 +1,61 @@
+<div class="auth-wrap">
+  <div class="bg-blur"></div>
+
+  <div class="card">
+    <div class="brand">
+      <div class="logo">RS</div>
+      <div class="titles">
+        <h1>Rota Status</h1>
+        <p>Entre para acompanhar manifestos e entregas</p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <div class="field">
+        <label>CPF</label>
+        <input
+          type="text"
+          inputmode="numeric"
+          placeholder="000.000.000-00"
+          formControlName="cpf"
+          autocomplete="username"
+        />
+        <small *ngIf="form.get('cpf')?.touched && form.get('cpf')?.invalid">
+          Informe um CPF válido.
+        </small>
+      </div>
+
+      <div class="field">
+        <label>Senha</label>
+        <input
+          type="password"
+          placeholder="Sua senha"
+          formControlName="senha"
+          autocomplete="current-password"
+        />
+        <small *ngIf="form.get('senha')?.touched && form.get('senha')?.invalid">
+          Informe sua senha.
+        </small>
+      </div>
+
+      <div class="error" *ngIf="errorMsg()">
+        {{ errorMsg() }}
+      </div>
+
+      <button class="btn" type="submit" [disabled]="submitting()">
+        <span *ngIf="!submitting()">Entrar</span>
+        <span *ngIf="submitting()" class="loading">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </span>
+      </button>
+
+      <div class="hint">
+        <span>Dica:</span> use seu CPF e a senha cadastrada no sistema.
+      </div>
+    </form>
+  </div>
+
+  <footer class="foot">
+    <span>FAN Tech • Rota Status</span>
+  </footer>
+</div>

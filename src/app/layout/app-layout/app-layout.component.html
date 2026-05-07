@@ -4,44 +4,91 @@
       <div class="brand__logo">RS</div>
       <div class="brand__text">
         <div class="brand__title">Rota Status</div>
-        <div class="brand__subtitle">Operador</div>
+        <div class="brand__subtitle">{{ sidebarSubtitle() }}</div>
       </div>
     </div>
 
     <nav class="nav">
-      <div class="nav__section">MONITORAMENTO</div>
 
-      <a
-        class="nav__item"
-        routerLink="/manifestos"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <span class="dot"></span>
-        Buscar Manifesto
-      </a>
+      <!-- ✅ ADMIN: só cadastros -->
+      <ng-container *ngIf="isAdmin() || isOperador()">
+        <div class="nav__section">CADASTROS</div>
 
-      <div class="nav__section">CADASTROS</div>
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Usuários
+        </a>
 
-      <a class="nav__item is-disabled" title="Em breve">
-        <span class="dot"></span>
-        Motoristas
-      </a>
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Motoristas
+        </a>
 
-      <a class="nav__item is-disabled" title="Em breve">
-        <span class="dot"></span>
-        Veículos
-      </a>
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Veículos
+        </a>
 
-      <a
-        class="nav__item"
-        routerLink="/manifestos/novo"
-        routerLinkActive="is-active"
-      >
-        <span class="dot"></span>
-        Novo Manifesto
-      </a>
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Manifestos
+        </a>
+      </ng-container>
 
+      <!-- ✅ OPERADOR: monitoramento + novo manifesto -->
+      <ng-container *ngIf="isOperador() || isAdmin()">
+        <div class="nav__section">MONITORAMENTO</div>
+
+        <a
+          class="nav__item"
+          routerLink="/manifestos"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span class="dot"></span>
+          Buscar Manifesto
+        </a>
+
+        <div class="nav__section">CADASTROS</div>
+
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Motoristas
+        </a>
+
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Veículos
+        </a>
+
+        <a
+          class="nav__item"
+          routerLink="/manifestos/novo"
+          routerLinkActive="is-active"
+        >
+          <span class="dot"></span>
+          Novo Manifesto
+        </a>
+      </ng-container>
+
+      <!-- ✅ MOTORISTA (futuro): meus manifestos -->
+      <ng-container *ngIf="isMotorista()">
+        <div class="nav__section">MINHA ROTA</div>
+
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Meus Manifestos
+        </a>
+
+        <a class="nav__item is-disabled" title="Em breve">
+          <span class="dot"></span>
+          Entregas em andamento
+        </a>
+      </ng-container>
+
+      <!-- ✅ botão sair sempre -->
+      <div class="nav__section">CONTA</div>
+      <button class="logout-btn" (click)="logout()">Sair</button>
     </nav>
 
     <div class="sidebar__footer">
@@ -56,8 +103,8 @@
   <main class="main">
     <header class="topbar">
       <div class="topbar__left">
-        <div class="topbar__title">Painel do Operador</div>
-        <div class="topbar__hint">Acompanhe manifestos e entregas em tempo real.</div>
+        <div class="topbar__title">{{ topbarTitle() }}</div>
+        <div class="topbar__hint">{{ topbarHint() }}</div>
       </div>
 
       <div class="topbar__right">

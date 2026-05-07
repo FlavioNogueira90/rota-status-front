@@ -167,3 +167,17 @@
   color: #027a48;
   border-color: #abefc6;
 }
+
+.logout-btn{
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+.logout-btn:hover{
+  background: rgba(255,255,255,0.10);
+}
+
