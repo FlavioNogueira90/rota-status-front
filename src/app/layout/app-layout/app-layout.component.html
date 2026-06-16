@@ -14,7 +14,11 @@
       <ng-container *ngIf="isAdmin() || isOperador()">
         <div class="nav__section">CADASTROS</div>
 
-        <a class="nav__item is-disabled" title="Em breve">
+        <a
+          class="nav__item"
+          routerLink="/usuarios"
+          routerLinkActive="is-active"
+        >
           <span class="dot"></span>
           Usuários
         </a>

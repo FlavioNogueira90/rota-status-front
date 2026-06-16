@@ -1,0 +1,60 @@
+<div class="page">
+  <div class="header">
+    <div>
+      <h1>Editar Usuário</h1>
+      <p class="subtitle">
+        Atualize dados cadastrais e perfil de acesso.
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--ghost" type="button" (click)="voltar()">Voltar</button>
+      <button class="btn" type="button" (click)="salvar()" [disabled]="salvando() || carregando()">
+        {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p *ngIf="carregando()" class="muted">Carregando usuário...</p>
+
+    <div class="grid" *ngIf="!carregando()">
+      <div class="field">
+        <label class="label">CPF</label>
+        <input class="input" [value]="cpf" disabled />
+      </div>
+
+      <div class="field">
+        <label class="label">Status</label>
+        <input class="input" [value]="ativo ? 'Ativo' : 'Inativo'" disabled />
+      </div>
+
+      <div class="field">
+        <label class="label">Perfil</label>
+        <select class="input" [(ngModel)]="form.role">
+          <option value="ADMIN">Administrador</option>
+          <option value="OPERADOR">Operador</option>
+          <option value="MOTORISTA">Motorista</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label">Nome</label>
+        <input class="input" [(ngModel)]="form.nome" placeholder="Nome completo" />
+      </div>
+
+      <div class="field">
+        <label class="label">E-mail</label>
+        <input class="input" [(ngModel)]="form.email" placeholder="usuario@empresa.com.br" />
+      </div>
+
+      <div class="field">
+        <label class="label">Telefone</label>
+        <input class="input" [(ngModel)]="form.telefone" placeholder="(11) 99999-9999" />
+      </div>
+    </div>
+
+    <p *ngIf="erro()" class="error">{{ erro() }}</p>
+    <p *ngIf="sucesso()" class="success">{{ sucesso() }}</p>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { ManifestoComponent } from './features/manifestos/pages/manifesto/manife
 import { NovoManifestoComponent } from './features/manifestos/pages/novo-manifesto/novo-manifesto.component';
 
 import { authGuard } from './core/auth/auth.guard';
+import { roleGuard } from './core/auth/role.guard';
 
 export const routes: Routes = [
   {
@@ -25,14 +26,41 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'manifestos', pathMatch: 'full' },
+
       { path: 'manifestos', component: ManifestoComponent },
       { path: 'manifestos/novo', component: NovoManifestoComponent },
+
+      {
+        path: 'usuarios',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN'] },
+        loadComponent: () =>
+          import('./features/usuarios/usuarios.component')
+            .then(m => m.UsuariosComponent)
+      },
+      {
+        path: 'usuarios/novo',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN'] },
+        loadComponent: () =>
+          import('./features/usuarios/novo-usuario.component')
+            .then(m => m.NovoUsuarioComponent)
+      },
+      {
+        path: 'usuarios/:id/editar',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN'] },
+        loadComponent: () =>
+          import('./features/usuarios/editar-usuario.component')
+            .then(m => m.EditarUsuarioComponent)
+      },
       {
         path: 'manifestos/:numeroManifesto/entregas/:numeroEntrega',
         loadComponent: () =>
           import('./features/entregas/pages/entrega-detalhe/entrega-detalhe.component')
             .then(m => m.EntregaDetalheComponent)
       },
+
       { path: '**', redirectTo: 'manifestos' }
     ]
   }

@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="header">
+    <div>
+      <h1>Novo Usuário</h1>
+      <p class="subtitle">Cadastre administradores, operadores e motoristas.</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--ghost" type="button" (click)="voltar()">Voltar</button>
+      <button class="btn" type="button" (click)="salvar()" [disabled]="salvando()">
+        {{ salvando() ? 'Salvando...' : 'Salvar usuário' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid">
+      <div class="field">
+        <label class="label">Nome</label>
+        <input class="input" [(ngModel)]="form.nome" placeholder="Ex: João da Silva" />
+      </div>
+
+      <div class="field">
+        <label class="label">CPF</label>
+        <input class="input" [(ngModel)]="form.cpf" placeholder="000.000.000-00" />
+      </div>
+
+      <div class="field">
+        <label class="label">Perfil</label>
+        <select class="input" [(ngModel)]="form.role">
+          <option value="ADMIN">Administrador</option>
+          <option value="OPERADOR">Operador</option>
+          <option value="MOTORISTA">Motorista</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label">E-mail</label>
+        <input class="input" [(ngModel)]="form.email" placeholder="usuario@empresa.com.br" />
+      </div>
+
+      <div class="field">
+        <label class="label">Telefone</label>
+        <input class="input" [(ngModel)]="form.telefone" placeholder="(11) 99999-9999" />
+      </div>
+
+      <div class="field">
+        <label class="label">Senha inicial</label>
+        <input class="input" type="password" [(ngModel)]="form.senha" placeholder="Mínimo 6 caracteres" />
+      </div>
+    </div>
+
+    <p *ngIf="erro()" class="error">{{ erro() }}</p>
+    <p *ngIf="sucesso()" class="success">{{ sucesso() }}</p>
+  </div>
+</div>

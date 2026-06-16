@@ -1,0 +1,141 @@
+<div class="page">
+  <header class="page__header">
+    <div>
+      <h1>Administração de Usuários</h1>
+      <p class="subtitle">
+        Gerencie usuários, perfis e acessos ao sistema.
+      </p>
+    </div>
+
+    <button class="btn" type="button" routerLink="/usuarios/novo">
+      + Novo Usuário
+    </button>
+  </header>
+
+  <section class="card grid">
+    <div class="grid__header">
+      <h3>Usuários</h3>
+      <span class="hint">Listagem de usuários cadastrados no sistema</span>
+    </div>
+
+    <p *ngIf="carregando()" class="muted">Carregando usuários...</p>
+    <p *ngIf="erro()" class="error">{{ erro() }}</p>
+
+<div class="filters">
+  <div class="field field--search">
+    <label class="label">Buscar</label>
+
+    <div class="search-box">
+      <span class="search-icon">🔎</span>
+      <input
+        class="input"
+        type="text"
+        placeholder="Nome, CPF, e-mail ou telefone"
+        [value]="filtroTexto()"
+        (input)="filtroTexto.set($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Perfil</label>
+    <select
+      class="input"
+      [ngModel]="filtroRole()"
+      (ngModelChange)="filtroRole.set($event)"
+    >
+      <option value="TODOS">Todos</option>
+      <option value="ADMIN">Admin</option>
+      <option value="OPERADOR">Operador</option>
+      <option value="MOTORISTA">Motorista</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="label">Status</label>
+    <select
+      class="input"
+      [ngModel]="filtroStatus()"
+      (ngModelChange)="filtroStatus.set($event)"
+    >
+      <option value="TODOS">Todos</option>
+      <option value="ATIVO">Ativos</option>
+      <option value="INATIVO">Inativos</option>
+    </select>
+  </div>
+
+  <button class="btn btn--ghost" type="button" (click)="limparFiltros()">
+    Limpar
+  </button>
+</div>
+
+    <table class="table" *ngIf="!carregando() && usuariosFiltrados().length > 0">
+      <thead>
+        <tr>
+          <th (click)="ordenar('nome')">Nome {{ iconeOrdenacao('nome') }}</th>
+          <th (click)="ordenar('cpf')">CPF {{ iconeOrdenacao('cpf') }}</th>
+          <th (click)="ordenar('email')">Email {{ iconeOrdenacao('email') }}</th>
+          <th (click)="ordenar('telefone')">Telefone {{ iconeOrdenacao('telefone') }}</th>
+          <th (click)="ordenar('role')">Perfil {{ iconeOrdenacao('role') }}</th>
+          <th (click)="ordenar('ativo')">Status {{ iconeOrdenacao('ativo') }}</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let u of usuariosFiltrados()" class="row">
+          <td class="strong">{{ u.nome }}</td>
+          <td class="mono">{{ u.cpf }}</td>
+          <td class="muted">{{ u.email }}</td>
+          <td>{{ u.telefone }}</td>
+          <td>
+            <span class="pill">{{ u.role }}</span>
+          </td>
+          <td>
+            <span class="pill" [ngClass]="statusClass(u)">
+              {{ statusLabel(u) }}
+            </span>
+          </td>
+          <td class="actions-cell">
+
+            <button
+              class="icon-btn"
+              title="Editar usuário"
+              [routerLink]="['/usuarios', u.id, 'editar']">
+              ✏️
+            </button>
+            <button
+              class="icon-btn"
+              type="button"
+              title="Resetar senha"
+              (click)="resetarSenha(u)"
+            >
+              🔑
+            </button>
+
+            <button
+              *ngIf="u.ativo"
+              class="icon-btn icon-btn--danger"
+              title="Inativar usuário"
+              (click)="inativar(u)">
+              ⛔
+            </button>
+
+            <button
+              *ngIf="!u.ativo"
+              class="icon-btn icon-btn--success"
+              title="Ativar usuário"
+              (click)="ativar(u)">
+              ✅
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!carregando() && usuariosFiltrados().length === 0" class="empty">
+      Nenhum usuário encontrado com os filtros informados.
+    </div>
+  </section>
+</div>

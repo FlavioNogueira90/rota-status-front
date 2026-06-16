@@ -181,3 +181,49 @@
   background: rgba(255,255,255,0.10);
 }
 
+@media (max-width: 768px) {
+  .layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+  }
+
+  .brand {
+    padding: 16px;
+  }
+
+  .nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 0 12px 12px;
+  }
+
+  .nav__section,
+  .sidebar__footer {
+    display: none;
+  }
+
+  .nav__item,
+  .logout-btn {
+    min-width: max-content;
+    white-space: nowrap;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .topbar {
+    display: none;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
