@@ -11,7 +11,6 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   private http = inject(HttpClient);
 
-  //private baseUrl = 'http://localhost:8080'; // trocar por environment depois
   private baseUrl = environment.apiUrl;
 
 

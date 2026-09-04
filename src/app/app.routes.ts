@@ -60,7 +60,30 @@ export const routes: Routes = [
           import('./features/entregas/pages/entrega-detalhe/entrega-detalhe.component')
             .then(m => m.EntregaDetalheComponent)
       },
-
+      {
+        path: 'veiculos',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/veiculos/veiculos.component')
+            .then(m => m.VeiculosComponent)
+      },
+      {
+        path: 'veiculos/novo',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/veiculos/novo-veiculo.component')
+            .then(m => m.NovoVeiculoComponent)
+      },
+      {
+        path: 'veiculos/:id/editar',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/veiculos/editar-veiculo.component')
+            .then(m => m.EditarVeiculoComponent)
+      },
       { path: '**', redirectTo: 'manifestos' }
     ]
   }

@@ -1,0 +1,276 @@
+<div class="page">
+
+  <header class="page__header">
+
+    <div>
+      <h1>Gestão de Veículos</h1>
+
+      <p class="subtitle">
+        Gerencie os veículos disponíveis para operação.
+      </p>
+    </div>
+
+    <button
+      class="btn"
+      type="button"
+      routerLink="/veiculos/novo"
+    >
+      + Novo Veículo
+    </button>
+
+  </header>
+
+  <section class="card grid">
+
+    <div class="grid__header">
+      <h3>Veículos</h3>
+
+      <span class="hint">
+        Listagem de veículos cadastrados no sistema
+      </span>
+    </div>
+
+    <p
+      *ngIf="carregando()"
+      class="muted"
+    >
+      Carregando veículos...
+    </p>
+
+    <p
+      *ngIf="erro()"
+      class="error"
+    >
+      {{ erro() }}
+    </p>
+
+    <div class="filters">
+
+      <div class="field field--search">
+
+        <label class="label">
+          Buscar
+        </label>
+
+        <div class="search-box">
+
+          <span class="search-icon">
+            🔎
+          </span>
+
+          <input
+            class="input"
+            type="text"
+            placeholder="Placa, marca, modelo ou tipo"
+            [value]="filtroTexto()"
+            (input)="filtroTexto.set($any($event.target).value)"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="field">
+
+        <label class="label">
+          Status
+        </label>
+
+        <select
+          class="input"
+          [ngModel]="filtroStatus()"
+          (ngModelChange)="filtroStatus.set($event)"
+        >
+          <option value="TODOS">Todos</option>
+          <option value="ATIVO">Ativos</option>
+          <option value="INATIVO">Inativos</option>
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label class="label">
+          Refrigerado
+        </label>
+
+        <select
+          class="input"
+          [ngModel]="filtroRefrigerado()"
+          (ngModelChange)="filtroRefrigerado.set($event)"
+        >
+          <option value="TODOS">Todos</option>
+          <option value="SIM">Sim</option>
+          <option value="NAO">Não</option>
+        </select>
+
+      </div>
+
+      <button
+        class="btn btn--ghost"
+        type="button"
+        (click)="limparFiltros()"
+      >
+        Limpar
+      </button>
+
+    </div>
+
+    <table
+      class="table"
+      *ngIf="
+        !carregando() &&
+        veiculosFiltrados().length > 0
+      "
+    >
+
+      <thead>
+        <tr>
+
+          <th (click)="ordenar('placa')">
+            Placa {{ iconeOrdenacao('placa') }}
+          </th>
+
+          <th (click)="ordenar('marca')">
+            Marca {{ iconeOrdenacao('marca') }}
+          </th>
+
+          <th (click)="ordenar('modelo')">
+            Modelo {{ iconeOrdenacao('modelo') }}
+          </th>
+
+          <th (click)="ordenar('ano')">
+            Ano {{ iconeOrdenacao('ano') }}
+          </th>
+
+          <th (click)="ordenar('tipoVeiculo')">
+            Tipo {{ iconeOrdenacao('tipoVeiculo') }}
+          </th>
+
+          <th (click)="ordenar('capacidadeKg')">
+            Capacidade {{ iconeOrdenacao('capacidadeKg') }}
+          </th>
+
+          <th (click)="ordenar('refrigerado')">
+            Refrigerado {{ iconeOrdenacao('refrigerado') }}
+          </th>
+
+          <th (click)="ordenar('ativo')">
+            Status {{ iconeOrdenacao('ativo') }}
+          </th>
+
+          <th>
+            Ações
+          </th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let v of veiculosFiltrados()"
+          class="row"
+        >
+
+          <td class="strong mono">
+            {{ v.placa }}
+          </td>
+
+          <td>
+            {{ v.marca }}
+          </td>
+
+          <td>
+            {{ v.modelo }}
+          </td>
+
+          <td>
+            {{ v.ano || '-' }}
+          </td>
+
+          <td>
+            <span class="pill">
+              {{ v.tipoVeiculo }}
+            </span>
+          </td>
+
+          <td>
+            {{
+              v.capacidadeKg != null
+                ? (v.capacidadeKg | number:'1.0-2') + ' kg'
+                : '-'
+            }}
+          </td>
+
+          <td>
+            {{ refrigeradoLabel(v) }}
+          </td>
+
+          <td>
+
+            <span
+              class="pill"
+              [ngClass]="statusClass(v)"
+            >
+              {{ statusLabel(v) }}
+            </span>
+
+          </td>
+
+          <td class="actions-cell">
+
+            <button
+              class="icon-btn"
+              type="button"
+              title="Editar veículo"
+              [routerLink]="[
+                '/veiculos',
+                v.id,
+                'editar'
+              ]"
+            >
+              ✏️
+            </button>
+
+            <button
+              *ngIf="v.ativo"
+              class="icon-btn icon-btn--danger"
+              type="button"
+              title="Inativar veículo"
+              (click)="inativar(v)"
+            >
+              ⛔
+            </button>
+
+            <button
+              *ngIf="!v.ativo"
+              class="icon-btn icon-btn--success"
+              type="button"
+              title="Ativar veículo"
+              (click)="ativar(v)"
+            >
+              ✅
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div
+      *ngIf="
+        !carregando() &&
+        veiculosFiltrados().length === 0
+      "
+      class="empty"
+    >
+      Nenhum veículo encontrado com os filtros informados.
+    </div>
+
+  </section>
+
+</div>

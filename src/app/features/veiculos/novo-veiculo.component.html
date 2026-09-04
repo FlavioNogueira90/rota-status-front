@@ -1,0 +1,138 @@
+<div class="page">
+
+  <header class="page__header">
+    <div>
+      <h1>Novo Veículo</h1>
+
+      <p class="subtitle">
+        Cadastre um veículo para utilização nos manifestos.
+      </p>
+    </div>
+  </header>
+
+  <section class="card">
+
+    <p *ngIf="erro()" class="error">
+      {{ erro() }}
+    </p>
+
+    <p *ngIf="sucesso()" class="success">
+      {{ sucesso() }}
+    </p>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label class="label">Placa *</label>
+
+        <input
+          class="input placa"
+          type="text"
+          maxlength="7"
+          placeholder="ABC1D23"
+          [(ngModel)]="form.placa"
+          (input)="formatarPlaca()"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Marca *</label>
+
+        <input
+          class="input"
+          type="text"
+          placeholder="Ex.: Kia"
+          [(ngModel)]="form.marca"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Modelo *</label>
+
+        <input
+          class="input"
+          type="text"
+          placeholder="Ex.: Bongo K2500"
+          [(ngModel)]="form.modelo"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Ano</label>
+
+        <input
+          class="input"
+          type="number"
+          min="1900"
+          placeholder="2021"
+          [(ngModel)]="form.ano"
+        />
+      </div>
+
+      <div class="field">
+        <label class="label">Tipo *</label>
+
+        <select
+          class="input"
+          [(ngModel)]="form.tipoVeiculo"
+        >
+          <option
+            *ngFor="let tipo of tiposVeiculo"
+            [value]="tipo.valor"
+          >
+            {{ tipo.descricao }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label">Capacidade (kg)</label>
+
+        <input
+          class="input"
+          type="number"
+          min="1"
+          step="0.01"
+          placeholder="1500"
+          [(ngModel)]="form.capacidadeKg"
+        />
+      </div>
+
+      <div class="field field--checkbox">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [(ngModel)]="form.refrigerado"
+          />
+
+          Veículo refrigerado
+        </label>
+      </div>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn btn--ghost"
+        type="button"
+        (click)="voltar()"
+        [disabled]="salvando()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        class="btn"
+        type="button"
+        (click)="salvar()"
+        [disabled]="salvando()"
+      >
+        {{ salvando() ? 'Salvando...' : 'Cadastrar Veículo' }}
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
