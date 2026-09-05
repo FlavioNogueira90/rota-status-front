@@ -1,87 +1,327 @@
 <div class="page">
+
   <div class="header">
+
     <div>
       <h1>Novo Manifesto</h1>
-      <p class="subtitle">Crie um manifesto e suas entregas para iniciar o monitoramento.</p>
+
+      <p class="subtitle">
+        Crie um manifesto e suas entregas para iniciar o monitoramento.
+      </p>
     </div>
 
     <div class="actions">
-      <button class="btn btn--ghost" type="button" (click)="preencherExemplo()">Preencher exemplo</button>
-      <button class="btn" type="button" (click)="salvar()" [disabled]="salvando">
+
+      <button
+        class="btn"
+        type="button"
+        (click)="salvar()"
+        [disabled]="salvando"
+      >
         {{ salvando ? 'Salvando...' : 'Salvar manifesto' }}
       </button>
+
     </div>
+
   </div>
 
+  <!-- =========================
+       DADOS DO MANIFESTO
+       ========================= -->
+
   <div class="card">
+
     <div class="grid">
-      <div class="field">
-        <label class="label">Número do Manifesto</label>
-        <input class="input" type="number" [(ngModel)]="form.numeroManifesto" placeholder="Ex: 9100" />
-      </div>
+
+      <!-- Número -->
 
       <div class="field">
-        <label class="label">Motorista ID</label>
-        <input class="input" [(ngModel)]="form.motoristaId" placeholder="Ex: MOT-001" />
+
+        <label class="label">
+          Número do Manifesto
+        </label>
+
+        <input
+          class="input"
+          type="number"
+          [(ngModel)]="form.numeroManifesto"
+          placeholder="Ex: 10001"
+        />
+
       </div>
 
-      <div class="field">
-        <label class="label">Placa do veículo</label>
-        <input class="input" [(ngModel)]="form.veiculoPlaca" placeholder="Ex: FAN1A23" />
+      <!-- Motorista -->
+
+      <div class="field autocomplete">
+
+        <label class="label">
+          Motorista
+        </label>
+
+        <div class="searchInput">
+
+          <input
+            class="input"
+            type="text"
+            [(ngModel)]="termoMotorista"
+            (input)="buscarMotoristas()"
+            placeholder="Digite nome ou CPF"
+            autocomplete="off"
+          />
+
+          <button
+            *ngIf="motoristaSelecionado"
+            type="button"
+            class="clearBtn"
+            (click)="limparMotorista()"
+            title="Limpar motorista"
+          >
+            ✕
+          </button>
+
+        </div>
+
+        <div
+          *ngIf="buscandoMotoristas"
+          class="searchHint"
+        >
+          Buscando motoristas...
+        </div>
+
+        <!-- Resultados -->
+
+        <div
+          class="autocompleteMenu"
+          *ngIf="
+            motoristasEncontrados.length > 0 &&
+            !motoristaSelecionado
+          "
+        >
+
+          <button
+            type="button"
+            class="autocompleteItem"
+            *ngFor="let motorista of motoristasEncontrados"
+            (click)="selecionarMotorista(motorista)"
+          >
+
+            <div class="optionMain">
+              {{ motorista.nome }}
+            </div>
+
+            <div class="optionSub">
+              CPF: {{ motorista.cpfMascarado }}
+            </div>
+
+          </button>
+
+        </div>
+
+        <!-- Selecionado -->
+
+        <div
+            class="selectedInfo"
+            *ngIf="motoristaSelecionado"
+         >
+            CPF: {{ motoristaSelecionado.cpfMascarado }}
+        </div>
+
       </div>
+
+  <!-- Veículo -->
+
+  <div class="field autocomplete">
+
+    <label class="label">
+      Veículo
+    </label>
+
+    <div class="searchInput">
+
+      <input
+        class="input"
+        type="text"
+        [(ngModel)]="termoVeiculo"
+        (input)="buscarVeiculos()"
+        placeholder="Digite a placa"
+        autocomplete="off"
+      />
+
+      <button
+        *ngIf="veiculoSelecionado"
+        type="button"
+        class="clearBtn"
+        (click)="limparVeiculo()"
+        title="Limpar veículo"
+      >
+        ✕
+      </button>
+
     </div>
 
-    <p *ngIf="erro" class="error">{{ erro }}</p>
-    <p *ngIf="sucesso" class="success">{{ sucesso }}</p>
+    <div
+      *ngIf="buscandoVeiculos"
+      class="searchHint"
+    >
+      Buscando veículos...
+    </div>
+
+    <!-- Resultados -->
+
+    <div
+      class="autocompleteMenu"
+      *ngIf="
+        veiculosEncontrados.length > 0 &&
+        !veiculoSelecionado
+      "
+    >
+
+      <button
+        type="button"
+        class="autocompleteItem"
+        *ngFor="let veiculo of veiculosEncontrados"
+        (click)="selecionarVeiculo(veiculo)"
+      >
+
+        <div class="optionMain">
+          {{ veiculo.placa }}
+        </div>
+
+        <div class="optionSub">
+          {{ veiculo.marca }} • {{ veiculo.modelo }}
+        </div>
+
+      </button>
+
+    </div>
+
+    <!-- Selecionado -->
+
+    <div
+      class="selectedInfo"
+      *ngIf="veiculoSelecionado"
+    >
+      {{ veiculoSelecionado.marca }} • {{ veiculoSelecionado.modelo }}
+    </div>
   </div>
 
-  <div class="card">
-    <div class="tableHeader">
-      <h2>Entregas</h2>
-      <button class="btn btn--ghost" type="button" (click)="adicionarEntrega()">+ Adicionar entrega</button>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="colNum">Nº</th>
-          <th>Cliente</th>
-          <th>Endereço</th>
-          <th class="colActions"></th>
-        </tr>
-      </thead>
+  </div>
 
-      <tbody>
-        <tr *ngFor="let e of form.entregas; let i = index">
-          <td class="mono">
-            <input class="input input--mini" type="number" [(ngModel)]="e.numero" />
-          </td>
+  <!-- =========================
+       ENTREGAS
+       ========================= -->
 
-          <td>
-            <input class="input" [(ngModel)]="e.clienteNome" placeholder="Nome do cliente" />
-          </td>
+  <div class="card entregasCard">
 
-          <td>
-            <input class="input" [(ngModel)]="e.endereco" placeholder="Endereço completo" />
-          </td>
+    <div class="tableHeader">
 
-          <td class="actionsCell">
-            <button
-              class="iconBtn"
-              type="button"
-              (click)="removerEntrega(i)"
-              [disabled]="form.entregas.length <= 1"
-              title="Remover entrega"
-            >
-              ✕
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div>
+        <h2>Entregas</h2>
+        <p class="tableSubtitle">
+          Cadastre as entregas que fazem parte deste manifesto.
+        </p>
+      </div>
+
+      <button
+        class="btn btn--ghost"
+        type="button"
+        (click)="adicionarEntrega()"
+      >
+        + Adicionar entrega
+      </button>
+
+    </div>
+
+    <div class="entregasTableWrapper">
+
+      <table class="table entregasTable">
+
+        <colgroup>
+          <col class="colNumero" />
+          <col class="colCliente" />
+          <col class="colEndereco" />
+          <col class="colAcao" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Cliente</th>
+            <th>Endereço</th>
+            <th aria-label="Ações"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let e of form.entregas;
+              let i = index
+            "
+          >
+
+            <td data-label="Nº">
+
+              <input
+                class="input input--numero"
+                type="number"
+                [(ngModel)]="e.numero"
+                min="1"
+              />
+
+            </td>
+
+            <td data-label="Cliente">
+
+              <input
+                class="input"
+                [(ngModel)]="e.clienteNome"
+                placeholder="Nome do cliente"
+              />
+
+            </td>
+
+            <td data-label="Endereço">
+
+              <input
+                class="input"
+                [(ngModel)]="e.endereco"
+                placeholder="Endereço completo"
+              />
+
+            </td>
+
+            <td class="actionsCell" data-label="">
+
+              <button
+                class="iconBtn"
+                type="button"
+                (click)="removerEntrega(i)"
+                [disabled]="form.entregas.length <= 1"
+                title="Remover entrega"
+                aria-label="Remover entrega"
+              >
+                ✕
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
 
     <div class="footerHint">
-      Dica: a numeração das entregas pode ser ajustada, mas não pode repetir.
+      Dica: a numeração das entregas pode ser ajustada,
+      mas não pode repetir.
     </div>
+
   </div>
+
 </div>

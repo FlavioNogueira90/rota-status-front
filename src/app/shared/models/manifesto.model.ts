@@ -1,8 +1,15 @@
 export interface Manifesto {
   numeroManifesto: number;
   status: string;
-  motoristaId: string;
+
+  motoristaId: number;
+  motoristaNome: string;
+  motoristaCpf: string;
+
+  veiculoId: number;
   veiculoPlaca: string;
+  veiculoModelo: string;
+
   totalEntregas: number;
   entregasConcluidas: number;
   percentualConcluido: number;

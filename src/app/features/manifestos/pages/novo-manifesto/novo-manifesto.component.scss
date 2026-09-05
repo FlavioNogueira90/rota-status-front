@@ -43,15 +43,29 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns:
+    minmax(160px, 0.75fr)
+    minmax(220px, 1fr)
+    minmax(220px, 1fr);
+  gap: 16px;
+  align-items: start;
+  width: 100%;
+}
 
-  @media (max-width: 960px) {
+.grid > * {
+  min-width: 0;
+}
+
+.field {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .grid {
     grid-template-columns: 1fr;
   }
 }
-
-.field {}
 
 .label {
   display: block;
@@ -63,6 +77,8 @@
 
 .input {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   height: 40px;
   border: 1px solid #d0d5dd;
   border-radius: 12px;
@@ -180,4 +196,303 @@
 
 .mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* =========================
+   AUTOCOMPLETE
+   ========================= */
+
+.autocomplete {
+  position: relative;
+}
+
+.searchInput {
+  position: relative;
+}
+
+.searchInput .input {
+  padding-right: 42px;
+}
+
+.clearBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #667085;
+
+  cursor: pointer;
+}
+
+.clearBtn:hover {
+  background: #f2f4f7;
+  color: #101828;
+}
+
+.searchHint {
+  margin-top: 6px;
+
+  font-size: 12px;
+  color: #667085;
+}
+
+.autocompleteMenu {
+  position: absolute;
+
+  z-index: 30;
+
+  left: 0;
+  right: 0;
+
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 6px;
+
+  background: #fff;
+
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+
+  box-shadow:
+    0 12px 30px rgba(16, 24, 40, 0.14);
+
+  overflow: hidden;
+
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.autocompleteItem {
+  display: block;
+
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 0;
+  border-bottom: 1px solid #f2f4f7;
+
+  background: #fff;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.autocompleteItem:last-child {
+  border-bottom: 0;
+}
+
+.autocompleteItem:hover {
+  background: #f9fafb;
+}
+
+.optionMain {
+  color: #101828;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.optionSub {
+  margin-top: 3px;
+
+  color: #667085;
+  font-size: 12px;
+}
+
+.selectedInfo {
+  margin-top: 5px;
+  padding-left: 2px;
+
+  font-size: 11px;
+  font-weight: 500;
+  color: #667085;
+}
+
+/* =========================
+   ENTREGAS - LAYOUT AMPLO
+   ========================= */
+
+.entregasCard {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.entregasCard .tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.entregasCard .tableHeader h2 {
+  margin: 0;
+}
+
+.tableSubtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #667085;
+}
+
+.entregasTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.entregasTable {
+  width: 100%;
+  min-width: 760px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.entregasTable col.colNumero {
+  width: 90px;
+}
+
+.entregasTable col.colCliente {
+  width: 32%;
+}
+
+.entregasTable col.colEndereco {
+  width: auto;
+}
+
+.entregasTable col.colAcao {
+  width: 64px;
+}
+
+.entregasTable th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  color: #475467;
+  background: #f9fafb;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.entregasTable td {
+  padding: 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.entregasTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.input--numero {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+
+.actionsCell {
+  text-align: center;
+}
+
+.entregasTable .iconBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.entregasCard .footerHint {
+  margin-top: 12px;
+}
+
+/* Mobile/tablet: cada entrega vira um bloco vertical */
+@media (max-width: 760px) {
+  .entregasCard .tableHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .entregasCard .tableHeader .btn {
+    width: 100%;
+  }
+
+  .entregasTableWrapper {
+    overflow: visible;
+  }
+
+  .entregasTable {
+    min-width: 0;
+  }
+
+  .entregasTable thead {
+    display: none;
+  }
+
+  .entregasTable,
+  .entregasTable tbody,
+  .entregasTable tr,
+  .entregasTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .entregasTable tr {
+    margin-bottom: 14px;
+    padding: 12px;
+    border: 1px solid #eaecf0;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .entregasTable td {
+    padding: 0 0 10px;
+    border: 0;
+  }
+
+  .entregasTable td:last-child {
+    padding-bottom: 0;
+  }
+
+  .entregasTable td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #475467;
+  }
+
+  .entregasTable .actionsCell {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .entregasTable .actionsCell::before {
+    display: none;
+  }
+}
+
+/* =========================
+   ALINHAMENTO DOS CARDS
+   ========================= */
+
+.page > .card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.entregasCard {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }

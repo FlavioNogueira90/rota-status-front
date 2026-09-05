@@ -34,6 +34,13 @@ export interface AtualizarUsuarioRequest {
 export interface ResetarSenhaRequest {
   novaSenha: string;
 }
+
+export interface MotoristaOption {
+  id: number;
+  nome: string;
+  cpf: string;
+  cpfMascarado: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -72,6 +79,15 @@ export class UsuariosService {
     return this.http.patch<UsuarioResponse>(
       `${this.baseUrl}/usuarios/cpf/${cpfLimpo}/resetar-senha`,
       request
+    );
+  }
+
+  buscarMotoristas(search: string): Observable<MotoristaOption[]> {
+    return this.http.get<MotoristaOption[]>(
+      `${this.baseUrl}/usuarios/motoristas`,
+      {
+        params: { search }
+      }
     );
   }
 }

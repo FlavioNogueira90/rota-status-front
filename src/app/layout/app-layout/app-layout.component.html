@@ -1,120 +1,193 @@
 <div class="layout">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand__logo">RS</div>
-      <div class="brand__text">
-        <div class="brand__title">Rota Status</div>
-        <div class="brand__subtitle">{{ sidebarSubtitle() }}</div>
-      </div>
-    </div>
+  <header class="app-header">
+    <div class="header__inner">
 
-    <nav class="nav">
+      <a class="brand" routerLink="/manifestos" aria-label="Rota Status">
+        <div class="brand__logo">RS</div>
+        <div class="brand__text">
+          <div class="brand__title">Rota Status</div>
+          <div class="brand__subtitle">{{ roleLabel() }}</div>
+        </div>
+      </a>
 
-      <!-- ✅ ADMIN: só cadastros -->
-      <ng-container *ngIf="isAdmin() || isOperador()">
-        <div class="nav__section">CADASTROS</div>
+      <button
+        type="button"
+        class="mobile-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen"
+        aria-label="Abrir menu"
+      >
+        ☰
+      </button>
 
-        <a
-          class="nav__item"
-          routerLink="/usuarios"
-          routerLinkActive="is-active"
+      <nav class="nav" [class.nav--open]="mobileMenuOpen">
+
+        <div
+          class="nav-group"
+          *ngIf="isAdmin() || isOperador()"
+          [class.is-open]="openMenu === 'cadastros'"
         >
-          <span class="dot"></span>
-          Usuários
-        </a>
+          <button
+            type="button"
+            class="nav-trigger"
+            (click)="toggleMenu('cadastros', $event)"
+          >
+            Cadastros
+            <span class="chevron">⌄</span>
+          </button>
 
-        <a class="nav__item is-disabled" title="Em breve">
-          <span class="dot"></span>
-          Motoristas
-        </a>
+          <div class="dropdown">
+            <a
+              *ngIf="isAdmin()"
+              routerLink="/usuarios"
+              routerLinkActive="is-active"
+              (click)="closeMenus()"
+            >
+              <span>
+                <strong>Usuários</strong>
+                <small>Gerenciar acessos e perfis</small>
+              </span>
+            </a>
 
-        <a
-          class="nav__item"
-          routerLink="/veiculos"
-          routerLinkActive="is-active"
+            <a
+              routerLink="/veiculos"
+              routerLinkActive="is-active"
+              (click)="closeMenus()"
+            >
+              <span>
+                <strong>Veículos</strong>
+                <small>Frota e dados dos veículos</small>
+              </span>
+            </a>
+
+            <a
+              routerLink="/manifestos/novo"
+              routerLinkActive="is-active"
+              (click)="closeMenus()"
+            >
+              <span>
+                <strong>Novo Manifesto</strong>
+                <small>Cadastrar manifesto e entregas</small>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="nav-group"
+          *ngIf="isAdmin() || isOperador()"
+          [class.is-open]="openMenu === 'monitoramento'"
         >
-          <span class="dot"></span>
-          Veículos
-        </a>
+          <button
+            type="button"
+            class="nav-trigger"
+            (click)="toggleMenu('monitoramento', $event)"
+          >
+            Monitoramento
+            <span class="chevron">⌄</span>
+          </button>
 
-        <a class="nav__item is-disabled" title="Em breve">
-          <span class="dot"></span>
-          Manifestos
-        </a>
-      </ng-container>
+          <div class="dropdown">
+            <a
+              routerLink="/manifestos"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="closeMenus()"
+            >
+              <span>
+                <strong>Buscar Manifesto</strong>
+                <small>Consultar manifestos e entregas</small>
+              </span>
+            </a>
 
-      <!-- ✅ OPERADOR: monitoramento + novo manifesto -->
-      <ng-container *ngIf="isOperador() || isAdmin()">
-        <div class="nav__section">MONITORAMENTO</div>
+            <div class="dropdown__disabled">
+              <span>
+                <strong>Painel Operacional</strong>
+                <small>Em breve</small>
+              </span>
+            </div>
 
-        <a
-          class="nav__item"
-          routerLink="/manifestos"
-          routerLinkActive="is-active"
-          [routerLinkActiveOptions]="{ exact: true }"
+            <div class="dropdown__disabled">
+              <span>
+                <strong>Mapa em Tempo Real</strong>
+                <small>Em breve</small>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="nav-group"
+          *ngIf="isMotorista()"
+          [class.is-open]="openMenu === 'rota'"
         >
-          <span class="dot"></span>
-          Buscar Manifesto
-        </a>
+          <button
+            type="button"
+            class="nav-trigger"
+            (click)="toggleMenu('rota', $event)"
+          >
+            Minha Rota
+            <span class="chevron">⌄</span>
+          </button>
 
-        <div class="nav__section">CADASTROS</div>
+          <div class="dropdown">
+            <div class="dropdown__disabled">
+              <span>
+                <strong>Meus Manifestos</strong>
+                <small>Em breve</small>
+              </span>
+            </div>
 
-        <a class="nav__item is-disabled" title="Em breve">
-          <span class="dot"></span>
-          Motoristas
-        </a>
+            <div class="dropdown__disabled">
+              <span>
+                <strong>Entregas em andamento</strong>
+                <small>Em breve</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-        <a
-          class="nav__item"
-          routerLink="/manifestos/novo"
-          routerLinkActive="is-active"
-        >
-          <span class="dot"></span>
-          Novo Manifesto
-        </a>
-      </ng-container>
-
-      <!-- ✅ MOTORISTA (futuro): meus manifestos -->
-      <ng-container *ngIf="isMotorista()">
-        <div class="nav__section">MINHA ROTA</div>
-
-        <a class="nav__item is-disabled" title="Em breve">
-          <span class="dot"></span>
-          Meus Manifestos
-        </a>
-
-        <a class="nav__item is-disabled" title="Em breve">
-          <span class="dot"></span>
-          Entregas em andamento
-        </a>
-      </ng-container>
-
-      <!-- ✅ botão sair sempre -->
-      <div class="nav__section">CONTA</div>
-      <button class="logout-btn" (click)="logout()">Sair</button>
-    </nav>
-
-    <div class="sidebar__footer">
-      <div class="footer__line"></div>
-      <div class="footer__text">
-        <div class="muted">Ambiente</div>
-        <b>Local</b>
-      </div>
-    </div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar">
-      <div class="topbar__left">
-        <div class="topbar__title">{{ topbarTitle() }}</div>
-        <div class="topbar__hint">{{ topbarHint() }}</div>
-      </div>
-
-      <div class="topbar__right">
+      <div
+        class="account"
+        [class.is-open]="openMenu === 'conta'"
+      >
         <span class="pill pill--ok">Backend online</span>
-      </div>
-    </header>
 
+        <button
+          type="button"
+          class="account-trigger"
+          (click)="toggleMenu('conta', $event)"
+        >
+          <span class="avatar">{{ userInitial() }}</span>
+
+          <span class="account__text">
+            <strong>{{ roleLabel() }}</strong>
+            <small>Ambiente local</small>
+          </span>
+
+          <span class="chevron">⌄</span>
+        </button>
+
+        <div class="dropdown dropdown--account">
+          <div class="account-summary">
+            <strong>{{ topbarTitle() }}</strong>
+            <small>{{ topbarHint() }}</small>
+          </div>
+
+          <button
+            type="button"
+            class="logout-btn"
+            (click)="logout()"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" (click)="closeMenus()">
     <section class="content">
       <router-outlet></router-outlet>
     </section>
