@@ -1,0 +1,100 @@
+<div class="home">
+
+  <section class="welcome">
+    <h1>Olá, {{ primeiroNome() }}! 👋</h1>
+
+    <p>
+      Bem-vindo ao Rota Status.
+    </p>
+
+    <span>
+      Acesse abaixo as funcionalidades disponíveis para o seu perfil.
+    </span>
+  </section>
+
+  <section class="atalhos">
+
+    <!-- MOTORISTA -->
+
+    <a
+      *ngIf="isMotorista()"
+      routerLink="/minha-rota"
+      class="card"
+    >
+      <div class="card__icon">🚚</div>
+
+      <div>
+        <h2>Minha Rota</h2>
+        <p>
+          Consulte seus manifestos e acompanhe suas entregas.
+        </p>
+      </div>
+    </a>
+
+    <!-- OPERADOR / ADMIN -->
+
+    <a
+      *ngIf="isAdmin() || isOperador()"
+      routerLink="/manifestos/novo"
+      class="card"
+    >
+      <div class="card__icon">📋</div>
+
+      <div>
+        <h2>Novo Manifesto</h2>
+        <p>
+          Cadastre uma nova operação e suas entregas.
+        </p>
+      </div>
+    </a>
+
+    <a
+      *ngIf="isAdmin() || isOperador()"
+      routerLink="/manifestos"
+      class="card"
+    >
+      <div class="card__icon">🔎</div>
+
+      <div>
+        <h2>Buscar Manifesto</h2>
+        <p>
+          Consulte o andamento de manifestos e entregas.
+        </p>
+      </div>
+    </a>
+
+    <a
+      *ngIf="isAdmin() || isOperador()"
+      routerLink="/veiculos"
+      class="card"
+    >
+      <div class="card__icon">🚐</div>
+
+      <div>
+        <h2>Veículos</h2>
+        <p>
+          Consulte e gerencie os veículos cadastrados.
+        </p>
+      </div>
+    </a>
+
+    <!-- ADMIN -->
+
+    <a
+      *ngIf="isAdmin()"
+      routerLink="/usuarios"
+      class="card"
+    >
+      <div class="card__icon">👥</div>
+
+      <div>
+        <h2>Usuários</h2>
+        <p>
+          Gerencie acessos, perfis e usuários do sistema.
+        </p>
+      </div>
+    </a>
+
+  </section>
+
+</div>

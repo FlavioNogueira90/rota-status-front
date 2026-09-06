@@ -53,9 +53,9 @@ export class LoginComponent {
         // carrega /auth/me para ter role no app (guards etc.)
         this.auth.loadMe().subscribe({
           next: (me) => {
-            if (me.role === 'ADMIN') this.router.navigateByUrl('/cadastros');
-            else if (me.role === 'OPERADOR') this.router.navigateByUrl('/manifestos');
-            else this.router.navigateByUrl('/manifestos/motorista'); // futuro
+            if (me.role === 'ADMIN') this.router.navigateByUrl('/home');
+            else if (me.role === 'OPERADOR') this.router.navigateByUrl('/home');
+            else this.router.navigateByUrl('/home'); // futuro
           },
           error: () => {
             // se por algum motivo o /me falhar, ainda assim deixa entrar (ou desloga)

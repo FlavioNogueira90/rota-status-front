@@ -84,7 +84,29 @@ export const routes: Routes = [
           import('./features/veiculos/editar-veiculo.component')
             .then(m => m.EditarVeiculoComponent)
       },
-      { path: '**', redirectTo: 'manifestos' }
+      {
+        path: 'minha-rota',
+        canActivate: [roleGuard],
+        data: { roles: ['MOTORISTA'] },
+        loadComponent: () =>
+          import('./features/minha-rota/pages/meus-manifestos/meus-manifestos.component')
+            .then(m => m.MeusManifestosComponent)
+      },
+      {
+        path: 'minha-rota/:numeroManifesto',
+        canActivate: [roleGuard],
+        data: { roles: ['MOTORISTA'] },
+        loadComponent: () =>
+          import('./features/minha-rota/pages/rota-detalhe/rota-detalhe.component')
+            .then(m => m.RotaDetalheComponent)
+      },
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./features/home/home.component')
+            .then(m => m.HomeComponent)
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
     ]
   }
 ];

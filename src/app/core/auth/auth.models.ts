@@ -12,5 +12,6 @@ export interface LoginResponse {
 
 export interface MeResponse {
   cpf: string;
+  nome: string;
   role: Role;
 }

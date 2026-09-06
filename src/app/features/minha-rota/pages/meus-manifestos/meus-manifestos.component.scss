@@ -1,0 +1,178 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.section-title {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.manifesto-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.manifesto-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.manifesto-card__numero {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.manifesto-card__veiculo {
+  margin-top: 4px;
+  color: #64748b;
+}
+
+.status-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.status--aguardando .status-pill {
+  background: #fef3c7;
+}
+
+.status--liberado .status-pill {
+  background: #dcfce7;
+}
+
+.status--execucao .status-pill {
+  background: #dbeafe;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progress-info span {
+  color: #64748b;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar__value {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+}
+
+.manifesto-card__actions {
+  display: flex;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn--disabled {
+  background: #e2e8f0;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.historico {
+  margin-top: 8px;
+}
+
+.historico-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.historico-item {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.historico-item span {
+  display: block;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.historico-item__status {
+  text-align: right;
+}
+
+.state-card {
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.state-card--error {
+  color: #b91c1c;
+}
+
+@media (max-width: 640px) {
+  .manifesto-card__header,
+  .historico-item {
+    flex-direction: column;
+  }
+
+  .historico-item__status {
+    text-align: left;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

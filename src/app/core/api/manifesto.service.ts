@@ -29,19 +29,33 @@ export class ManifestoService {
   buscar(
     numeroManifesto: string | number
   ): Observable<Manifesto> {
-
     return this.http.get<Manifesto>(
       `${this.baseUrl}/manifestos/${numeroManifesto}`
+    );
+  }
+
+  listarMeusManifestos(): Observable<Manifesto[]> {
+    return this.http.get<Manifesto[]>(
+      `${this.baseUrl}/manifestos/motorista`
     );
   }
 
   criarNovoManifesto(
     payload: NovoManifestoRequest
   ): Observable<Manifesto> {
-
     return this.http.post<Manifesto>(
       `${this.baseUrl}/manifestos/novoManifesto`,
       payload
+    );
+  }
+
+  iniciarJornada(
+    numeroManifesto: number
+  ): Observable<string> {
+    return this.http.post(
+      `${this.baseUrl}/rotas/manifestos/${numeroManifesto}/iniciar-jornada`,
+      {},
+      { responseType: 'text' }
     );
   }
 }

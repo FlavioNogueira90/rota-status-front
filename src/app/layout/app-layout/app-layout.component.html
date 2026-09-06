@@ -2,7 +2,7 @@
   <header class="app-header">
     <div class="header__inner">
 
-      <a class="brand" routerLink="/manifestos" aria-label="Rota Status">
+      <a class="brand" routerLink="/home" aria-label="Rota Status">
         <div class="brand__logo">RS</div>
         <div class="brand__text">
           <div class="brand__title">Rota Status</div>
@@ -131,12 +131,16 @@
           </button>
 
           <div class="dropdown">
-            <div class="dropdown__disabled">
+            <a
+              routerLink="/minha-rota"
+              routerLinkActive="is-active"
+              (click)="closeMenus()"
+            >
               <span>
                 <strong>Meus Manifestos</strong>
-                <small>Em breve</small>
+                <small>Acompanhe suas rotas e entregas</small>
               </span>
-            </div>
+            </a>
 
             <div class="dropdown__disabled">
               <span>

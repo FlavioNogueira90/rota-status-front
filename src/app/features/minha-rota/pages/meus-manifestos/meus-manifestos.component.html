@@ -1,0 +1,167 @@
+<div class="page">
+
+  <section class="page-header">
+    <div>
+      <h1>Minha Rota</h1>
+      <p>Acompanhe seus manifestos e entregas.</p>
+    </div>
+  </section>
+
+  <section *ngIf="carregando" class="state-card">
+    Carregando suas rotas...
+  </section>
+
+  <section *ngIf="erro" class="state-card state-card--error">
+    {{ erro }}
+  </section>
+
+  <ng-container *ngIf="!carregando && !erro">
+
+    <section *ngIf="ativos.length > 0">
+      <h2 class="section-title">Rotas atuais</h2>
+
+      <div class="grid">
+
+        <article
+          class="manifesto-card"
+          *ngFor="let manifesto of ativos"
+          [ngClass]="statusClass(manifesto.status)"
+        >
+
+          <div class="manifesto-card__header">
+
+            <div>
+              <span class="manifesto-card__numero">
+                Manifesto #{{ manifesto.numeroManifesto }}
+              </span>
+
+              <div class="manifesto-card__veiculo">
+                {{ manifesto.veiculoModelo }}
+                •
+                {{ manifesto.veiculoPlaca }}
+              </div>
+            </div>
+
+            <span class="status-pill">
+              {{ statusLabel(manifesto.status) }}
+            </span>
+
+          </div>
+
+          <div class="progress-info">
+
+            <div>
+              <strong>
+                {{ manifesto.entregasConcluidas }}
+                de
+                {{ manifesto.totalEntregas }}
+              </strong>
+
+              <span> entregas concluídas</span>
+            </div>
+
+            <strong>
+              {{ manifesto.percentualConcluido }}%
+            </strong>
+
+          </div>
+
+          <div class="progress-bar">
+            <div
+              class="progress-bar__value"
+              [style.width.%]="manifesto.percentualConcluido"
+            ></div>
+          </div>
+
+          <div class="manifesto-card__actions">
+
+            <button
+              *ngIf="manifesto.status === 'AGUARDANDO_CARREGAMENTO'"
+              class="btn btn--disabled"
+              disabled
+            >
+              Aguardando liberação
+            </button>
+
+            <button
+              *ngIf="manifesto.status === 'LIBERADO'"
+              class="btn btn--primary"
+              [disabled]="iniciandoManifesto === manifesto.numeroManifesto"
+              (click)="iniciarJornada(manifesto)"
+            >
+              {{
+                iniciandoManifesto === manifesto.numeroManifesto
+                  ? 'Iniciando jornada...'
+                  : 'Iniciar jornada'
+              }}
+            </button>
+
+            <button
+              *ngIf="manifesto.status === 'EM_EXECUCAO'"
+              class="btn btn--primary"
+              (click)="continuarRota(manifesto)"
+            >
+              Continuar rota
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+    </section>
+
+    <section
+      *ngIf="ativos.length === 0"
+      class="state-card"
+    >
+      Nenhuma rota ativa no momento.
+    </section>
+
+    <section
+      *ngIf="concluidos.length > 0"
+      class="historico"
+    >
+
+      <h2 class="section-title">
+        Histórico
+      </h2>
+
+      <div class="historico-lista">
+
+        <article
+          class="historico-item"
+          *ngFor="let manifesto of concluidos"
+        >
+
+          <div>
+            <strong>
+              Manifesto #{{ manifesto.numeroManifesto }}
+            </strong>
+
+            <span>
+              {{ manifesto.veiculoModelo }}
+              •
+              {{ manifesto.veiculoPlaca }}
+            </span>
+          </div>
+
+          <div class="historico-item__status">
+            {{ manifesto.totalEntregas }}
+            / {{ manifesto.totalEntregas }}
+            entregas
+
+            <span>
+              Concluído
+            </span>
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</div>
