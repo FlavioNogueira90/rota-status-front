@@ -12,12 +12,7 @@
     <div class="search__row">
       <div class="field">
         <label class="label">Manifesto nº</label>
-        <input
-          class="input"
-          [(ngModel)]="numeroManifesto"
-          placeholder="Ex: 9100"
-          (keyup.enter)="carregar()"
-        />
+        <input class="input" [(ngModel)]="numeroManifesto" placeholder="Ex: 9100" (keyup.enter)="carregar()" />
       </div>
 
       <button class="btn" (click)="carregar()">Buscar</button>
@@ -57,20 +52,26 @@
     </div>
 
     <div class="progress">
-      <div
-        class="progress__bar"
-        [ngClass]="{
+      <div class="progress__bar" [ngClass]="{
           'progress__bar--zero': m.percentualConcluido === 0,
           'progress__bar--full': m.percentualConcluido === 100
-        }"
-        [style.width.%]="m.percentualConcluido"
-      ></div>
+        }" [style.width.%]="m.percentualConcluido"></div>
     </div>
 
 
     <div class="times">
       <div><span class="muted">Início:</span> <b>{{ formatarData(m.inicioEm) }}</b></div>
       <div><span class="muted">Fim:</span> <b>{{ formatarData(m.fimEm) }}</b></div>
+    </div>
+
+    <div class="manifesto__actions">
+      <button type="button" class="btn btn--secondary" (click)="abrirChecklist()">
+        {{
+        m.status === 'AGUARDANDO_CARREGAMENTO'
+        ? 'Checklist Pré-Rota'
+        : 'Ver Checklist'
+        }}
+      </button>
     </div>
   </section>
 
@@ -92,12 +93,7 @@
       </thead>
 
       <tbody>
-        <tr
-          *ngFor="let e of entregas"
-          (dblclick)="abrirDetalhe(e)"
-          class="row"
-          title="Duplo clique para ver detalhes"
-        >
+        <tr *ngFor="let e of entregas" (dblclick)="abrirDetalhe(e)" class="row" title="Duplo clique para ver detalhes">
           <td class="mono">{{ e.numero }}</td>
           <td class="strong">{{ e.clienteNome }}</td>
           <td class="muted">{{ e.endereco }}</td>

@@ -1,0 +1,271 @@
+<div class="page">
+
+  <section class="page-header">
+    <button type="button" class="btn-voltar" (click)="voltar()">
+      ← Voltar
+    </button>
+
+    <div>
+      <h1>Checklist Pré-Rota</h1>
+      <p>Manifesto #{{ numeroManifesto }}</p>
+    </div>
+  </section>
+
+  <section *ngIf="carregando" class="state-card">
+    Carregando checklist...
+  </section>
+
+  <section *ngIf="erro" class="state-card state-card--error">
+    {{ erro }}
+  </section>
+
+  <section *ngIf="sucesso" class="state-card state-card--success">
+    {{ sucesso }}
+  </section>
+
+  <ng-container *ngIf="!carregando">
+
+    <section *ngIf="checklist?.concluido" class="status-card status-card--success">
+      <div class="status-card__icon">
+        ✓
+      </div>
+
+      <div>
+        <strong>Checklist concluído</strong>
+
+        <p>
+          Este checklist já foi finalizado e está disponível
+          para validação da liberação da rota.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+
+      <div class="section-title">
+        <div>
+          <h2>Dados operacionais</h2>
+          <p>
+            Informe as condições registradas antes da saída do veículo.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="temperaturaCarga">
+            Temperatura da carga (°C)
+          </label>
+
+          <input id="temperaturaCarga" type="number" step="0.1" [(ngModel)]="form.temperaturaCarga"
+            [disabled]="checklist?.concluido === true" placeholder="Ex: -18" />
+        </div>
+
+        <div class="field">
+          <label for="quilometragem">
+            Quilometragem
+          </label>
+
+          <input id="quilometragem" type="number" min="0" [(ngModel)]="form.quilometragem"
+            [disabled]="checklist?.concluido === true" placeholder="Ex: 128450" />
+        </div>
+
+        <div class="field">
+          <label for="nivelCombustivel">
+            Nível de combustível (%)
+          </label>
+
+          <input id="nivelCombustivel" type="number" min="0" max="100" [(ngModel)]="form.nivelCombustivel"
+            [disabled]="checklist?.concluido === true" placeholder="Ex: 75" />
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="section-title">
+        <div>
+          <h2>Verificações</h2>
+          <p>
+            Marque cada item como OK ou NOK.
+          </p>
+        </div>
+      </div>
+
+      <div class="checks">
+
+        <div class="check-row">
+          <div>
+            <strong>Pneus</strong>
+            <span>Condição geral dos pneus</span>
+          </div>
+
+          <div class="check-actions">
+            <button type="button" class="option option--ok" [class.is-selected]="form.pneusOk === true"
+              [disabled]="checklist?.concluido === true" (click)="form.pneusOk = true">
+              ✓ OK
+            </button>
+
+            <button type="button" class="option option--nok" [class.is-selected]="form.pneusOk === false"
+              [disabled]="checklist?.concluido === true" (click)="form.pneusOk = false">
+              ✕ NOK
+            </button>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <div>
+            <strong>Luzes</strong>
+            <span>Faróis, lanternas e sinalização</span>
+          </div>
+
+          <div class="check-actions">
+            <button type="button" class="option option--ok" [class.is-selected]="form.luzesOk === true"
+              [disabled]="checklist?.concluido === true" (click)="form.luzesOk = true">
+              ✓ OK
+            </button>
+
+            <button type="button" class="option option--nok" [class.is-selected]="form.luzesOk === false"
+              [disabled]="checklist?.concluido === true" (click)="form.luzesOk = false">
+              ✕ NOK
+            </button>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <div>
+            <strong>Documentação</strong>
+            <span>Documentos obrigatórios disponíveis</span>
+          </div>
+
+          <div class="check-actions">
+            <button type="button" class="option option--ok" [class.is-selected]="form.documentacaoOk === true"
+              [disabled]="checklist?.concluido === true" (click)="form.documentacaoOk = true">
+              ✓ OK
+            </button>
+
+            <button type="button" class="option option--nok" [class.is-selected]="form.documentacaoOk === false"
+              [disabled]="checklist?.concluido === true" (click)="form.documentacaoOk = false">
+              ✕ NOK
+            </button>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <div>
+            <strong>Equipamento de refrigeração</strong>
+            <span>Funcionamento do equipamento</span>
+          </div>
+
+          <div class="check-actions">
+            <button type="button" class="option option--ok"
+              [class.is-selected]="form.equipamentoRefrigeracaoOk === true" [disabled]="checklist?.concluido === true"
+              (click)="form.equipamentoRefrigeracaoOk = true">
+              ✓ OK
+            </button>
+
+            <button type="button" class="option option--nok"
+              [class.is-selected]="form.equipamentoRefrigeracaoOk === false" [disabled]="checklist?.concluido === true"
+              (click)="form.equipamentoRefrigeracaoOk = false">
+              ✕ NOK
+            </button>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <div>
+            <strong>Carga conferida</strong>
+            <span>Volumes e carga validados antes da saída</span>
+          </div>
+
+          <div class="check-actions">
+            <button type="button" class="option option--ok" [class.is-selected]="form.cargaConferida === true"
+              [disabled]="checklist?.concluido === true" (click)="form.cargaConferida = true">
+              ✓ OK
+            </button>
+
+            <button type="button" class="option option--nok" [class.is-selected]="form.cargaConferida === false"
+              [disabled]="checklist?.concluido === true" (click)="form.cargaConferida = false">
+              ✕ NOK
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="field">
+        <label for="observacao">
+          Observações
+        </label>
+
+        <textarea id="observacao" rows="4" [(ngModel)]="form.observacao" [disabled]="checklist?.concluido === true"
+          placeholder="Registre qualquer observação relevante..."></textarea>
+      </div>
+
+    </section>
+
+    <section *ngIf="checklist?.concluido" class="audit-card">
+      <div>
+        <span>Concluído em</span>
+        <strong>
+          {{ checklist?.concluidoEm | date:'dd/MM/yyyy HH:mm' }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Concluído por</span>
+        <strong>
+          {{ checklist?.concluidoPorNome || checklist?.concluidoPor || '-' }}
+        </strong>
+      </div>
+    </section>
+
+    <section class="actions">
+
+      <button *ngIf="!checklist?.concluido" type="button" class="btn btn--secondary" [disabled]="salvando || concluindo"
+        (click)="salvar()">
+        {{
+        salvando
+        ? 'Salvando...'
+        : 'Salvar checklist'
+        }}
+      </button>
+
+      <button *ngIf="!checklist?.concluido" type="button" class="btn btn--primary" [disabled]="salvando || concluindo"
+        (click)="concluir()">
+        {{
+        concluindo
+        ? 'Concluindo...'
+        : 'Concluir checklist'
+        }}
+      </button>
+
+      <div *ngIf="
+        checklist?.concluido &&
+        statusManifesto === 'LIBERADO'
+        " class="route-released">
+        ✓ Rota liberada para o motorista
+      </div>
+
+      <button *ngIf="checklist?.concluido &&
+    statusManifesto === 'AGUARDANDO_CARREGAMENTO'
+  " type="button" class="btn btn--primary" [disabled]="liberando" (click)="liberarRota()">
+        {{
+        liberando
+        ? 'Liberando...'
+        : 'Liberar rota'
+        }}
+      </button>
+
+    </section>
+
+  </ng-container>
+
+</div>

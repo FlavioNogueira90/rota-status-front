@@ -31,16 +31,16 @@ export class ManifestoComponent implements OnInit {
   erro: string | null = null;
 
   ngOnInit() {
-  this.route.queryParamMap
-    .pipe(
-      map(params => (params.get('numero') || '').trim()),
-      distinctUntilChanged(),
-      filter(numero => !!numero)
-    )
-    .subscribe(numero => {
-      this.numeroManifesto = numero;
-      this.carregar();
-    });
+    this.route.queryParamMap
+      .pipe(
+        map(params => (params.get('numero') || '').trim()),
+        distinctUntilChanged(),
+        filter(numero => !!numero)
+      )
+      .subscribe(numero => {
+        this.numeroManifesto = numero;
+        this.carregar();
+      });
   }
 
 
@@ -67,32 +67,46 @@ export class ManifestoComponent implements OnInit {
     return isNaN(d.getTime()) ? valor : d.toLocaleString('pt-BR');
   }
 
-badgeClass(status: string): string {
-  switch (status) {
-    case 'CONCLUIDO': return 'badge--ok';
-    case 'PENDENTE': return 'badge--neutral';
-    case 'EM_TRANSITO': return 'badge--info';
-    case 'AGUARDANDO_RECEBIMENTO': return 'badge--warn';
-    case 'DEVOLUCAO':
-    case 'RECUSADO': return 'badge--danger';
-    case 'INTERROMPIDO':
-    case 'INTERROMPIDA': return 'badge--warn';
-    default: return 'badge--neutral';
+  badgeClass(status: string): string {
+    switch (status) {
+      case 'CONCLUIDO': return 'badge--ok';
+      case 'PENDENTE': return 'badge--neutral';
+      case 'EM_TRANSITO': return 'badge--info';
+      case 'AGUARDANDO_RECEBIMENTO': return 'badge--warn';
+      case 'DEVOLUCAO':
+      case 'RECUSADO': return 'badge--danger';
+      case 'INTERROMPIDO':
+      case 'INTERROMPIDA': return 'badge--warn';
+      default: return 'badge--neutral';
+    }
   }
-}
 
-pillClass(status: string): string {
-  switch (status) {
-    case 'ENTREGUE': return 'pill--ok';
-    case 'PENDENTE': return 'pill--neutral';
-    case 'EM_TRANSITO': return 'pill--info';
-    case 'AGUARDANDO_RECEBIMENTO': return 'pill--warn';
-    case 'DEVOLUCAO':
-    case 'RECUSADO': return 'pill--danger';
-    case 'INTERROMPIDA':
-    case 'INTERROMPIDO': return 'pill--warn';
-    default: return 'pill--neutral';
+  pillClass(status: string): string {
+    switch (status) {
+      case 'ENTREGUE': return 'pill--ok';
+      case 'PENDENTE': return 'pill--neutral';
+      case 'EM_TRANSITO': return 'pill--info';
+      case 'AGUARDANDO_RECEBIMENTO': return 'pill--warn';
+      case 'DEVOLUCAO':
+      case 'RECUSADO': return 'pill--danger';
+      case 'INTERROMPIDA':
+      case 'INTERROMPIDO': return 'pill--warn';
+      default: return 'pill--neutral';
+    }
   }
-}
+
+  abrirChecklist(): void {
+    const numero = this.numeroManifesto.trim();
+
+    if (!numero) {
+      return;
+    }
+
+    this.router.navigate([
+      '/manifestos',
+      numero,
+      'checklist'
+    ]);
+  }
 
 }

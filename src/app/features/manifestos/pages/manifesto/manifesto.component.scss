@@ -83,7 +83,9 @@
   font-weight: 700;
 }
 
-.btn:hover { filter: brightness(0.95); }
+.btn:hover {
+  filter: brightness(0.95);
+}
 
 .error {
   margin-top: 10px;
@@ -119,8 +121,16 @@
   background: #fcfcfd;
 }
 
-.kpi__label { color: #667085; font-size: 12px; }
-.kpi__value { font-size: 18px; font-weight: 800; margin-top: 2px; }
+.kpi__label {
+  color: #667085;
+  font-size: 12px;
+}
+
+.kpi__value {
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 2px;
+}
 
 .progress {
   height: 10px;
@@ -153,9 +163,36 @@
   flex-wrap: wrap;
 }
 
-.muted { color: #667085; }
-.strong { font-weight: 700; }
-.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.manifesto__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eef2f6;
+}
+
+.btn--secondary {
+  background: #ffffff;
+  color: #344054;
+  border: 1px solid #d0d5dd;
+}
+
+.btn--secondary:hover {
+  background: #f9fafb;
+  filter: none;
+}
+
+.muted {
+  color: #667085;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
 
 .grid__header {
   display: flex;
@@ -164,17 +201,23 @@
   gap: 12px;
   flex-wrap: wrap;
 
-  h3 { margin: 0; }
+  h3 {
+    margin: 0;
+  }
 }
 
-.hint { color: #667085; font-size: 12px; }
+.hint {
+  color: #667085;
+  font-size: 12px;
+}
 
 .table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 
-  th, td {
+  th,
+  td {
     text-align: left;
     padding: 12px 12px;
     border-bottom: 1px solid #eef2f6;
@@ -189,8 +232,13 @@
   }
 }
 
-.col-num { width: 70px; }
-.col-status { width: 170px; }
+.col-num {
+  width: 70px;
+}
+
+.col-status {
+  width: 170px;
+}
 
 .row {
   cursor: pointer;
@@ -200,7 +248,8 @@
   background: #f6f8ff;
 }
 
-.badge, .pill {
+.badge,
+.pill {
   display: inline-flex;
   align-items: center;
   padding: 5px 10px;
@@ -222,15 +271,63 @@
 
 
 /* manifesto badge */
-.badge--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
-.badge--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
-.badge--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
-.badge--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
-.badge--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }
+.badge--ok {
+  background: #ecfdf3;
+  color: #027a48;
+  border-color: #abefc6;
+}
+
+.badge--info {
+  background: #eff8ff;
+  color: #175cd3;
+  border-color: #b2ddff;
+}
+
+.badge--warn {
+  background: #fffaeb;
+  color: #b54708;
+  border-color: #fedf89;
+}
+
+.badge--danger {
+  background: #fef3f2;
+  color: #b42318;
+  border-color: #fecdca;
+}
+
+.badge--neutral {
+  background: #f2f4f7;
+  color: #344054;
+  border-color: #eaecf0;
+}
 
 /* entrega pill */
-.pill--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
-.pill--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
-.pill--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
-.pill--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
-.pill--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }
+.pill--ok {
+  background: #ecfdf3;
+  color: #027a48;
+  border-color: #abefc6;
+}
+
+.pill--info {
+  background: #eff8ff;
+  color: #175cd3;
+  border-color: #b2ddff;
+}
+
+.pill--warn {
+  background: #fffaeb;
+  color: #b54708;
+  border-color: #fedf89;
+}
+
+.pill--danger {
+  background: #fef3f2;
+  color: #b42318;
+  border-color: #fecdca;
+}
+
+.pill--neutral {
+  background: #f2f4f7;
+  color: #344054;
+  border-color: #eaecf0;
+}

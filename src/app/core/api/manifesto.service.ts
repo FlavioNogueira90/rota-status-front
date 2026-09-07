@@ -49,6 +49,15 @@ export class ManifestoService {
     );
   }
 
+  liberarRota(
+    numeroManifesto: string | number
+  ): Observable<void> {
+    return this.http.post<void>(
+      `${this.baseUrl}/manifestos/${numeroManifesto}/liberar`,
+      {}
+    );
+  }
+
   iniciarJornada(
     numeroManifesto: number
   ): Observable<string> {
