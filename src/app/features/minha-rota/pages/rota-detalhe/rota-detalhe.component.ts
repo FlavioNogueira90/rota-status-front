@@ -26,10 +26,9 @@ export class RotaDetalheComponent {
 
     carregando = true;
     erro = '';
+
     iniciandoEntrega: number | null = null;
     registrandoChegada: number | null = null;
-    concluindoEntrega: number | null = null;
-    rotaConcluida = false;
 
     constructor() {
         this.carregarEntregas();
@@ -65,6 +64,30 @@ export class RotaDetalheComponent {
         this.router.navigate(['/minha-rota']);
     }
 
+    abrirEntrega(entrega: Entrega): void {
+
+        /*
+         * O motorista pode consultar os detalhes
+         * enquanto a entrega estiver operacional.
+         *
+         * Entregas concluídas pertencem ao histórico
+         * operacional do OPERADOR/ADMIN.
+         */
+        if (
+            entrega.status === 'CONCLUIDO' ||
+            entrega.status === 'CONCLUIDO_COM_APONTAMENTOS'
+        ) {
+            return;
+        }
+
+        this.router.navigate([
+            '/manifestos',
+            this.numeroManifesto,
+            'entregas',
+            entrega.numero
+        ]);
+    }
+
     statusLabel(status: string): string {
         switch (status) {
             case 'PENDENTE':
@@ -76,17 +99,14 @@ export class RotaDetalheComponent {
             case 'AGUARDANDO_RECEBIMENTO':
                 return 'No destino';
 
-            case 'ENTREGUE':
-                return 'Entregue';
-
             case 'INTERROMPIDA':
                 return 'Interrompida';
 
-            case 'DEVOLUCAO':
-                return 'Devolução';
+            case 'CONCLUIDO':
+                return 'Concluído';
 
-            case 'RECUSADO':
-                return 'Recusado';
+            case 'CONCLUIDO_COM_APONTAMENTOS':
+                return 'Concluído com apontamentos';
 
             default:
                 return status;
@@ -104,14 +124,13 @@ export class RotaDetalheComponent {
             case 'AGUARDANDO_RECEBIMENTO':
                 return 'status--destino';
 
-            case 'ENTREGUE':
-                return 'status--entregue';
-
             case 'INTERROMPIDA':
                 return 'status--interrompida';
 
-            case 'DEVOLUCAO':
-            case 'RECUSADO':
+            case 'CONCLUIDO':
+                return 'status--entregue';
+
+            case 'CONCLUIDO_COM_APONTAMENTOS':
                 return 'status--problema';
 
             default:
@@ -280,6 +299,7 @@ export class RotaDetalheComponent {
             )
             .subscribe({
                 next: () => {
+
                     console.log(
                         'Chegada registrada para entrega:',
                         entrega.numero
@@ -287,11 +307,15 @@ export class RotaDetalheComponent {
 
                     this.registrandoChegada = null;
 
-                    // Recarrega para refletir AGUARDANDO_RECEBIMENTO
+                    /*
+                     * Recarrega para refletir
+                     * AGUARDANDO_RECEBIMENTO.
+                     */
                     this.carregarEntregas();
                 },
 
                 error: (erro) => {
+
                     console.error(
                         'Erro ao registrar chegada:',
                         erro
@@ -302,51 +326,15 @@ export class RotaDetalheComponent {
             });
     }
 
-    concluirEntrega(entrega: Entrega): void {
-
-        if (this.concluindoEntrega !== null) {
-            return;
-        }
-
-        this.concluindoEntrega = entrega.numero;
-
-        this.entregasService
-            .concluirEntrega(
-                this.numeroManifesto,
-                entrega.numero
-            )
-            .subscribe({
-                next: () => {
-                    console.log(
-                        'Entrega concluída:',
-                        entrega.numero
-                    );
-
-                    this.concluindoEntrega = null;
-
-                    this.carregarEntregas();
-                },
-
-                error: (erro) => {
-                    console.error(
-                        'Erro ao concluir entrega:',
-                        erro
-                    );
-
-                    this.concluindoEntrega = null;
-                }
-            });
-    }
-
     get rotaFinalizada(): boolean {
+
         if (this.entregas.length === 0) {
             return false;
         }
 
         return this.entregas.every(entrega =>
-            entrega.status === 'ENTREGUE' ||
-            entrega.status === 'DEVOLUCAO' ||
-            entrega.status === 'RECUSADO'
+            entrega.status === 'CONCLUIDO' ||
+            entrega.status === 'CONCLUIDO_COM_APONTAMENTOS'
         );
     }
 }

@@ -11,17 +11,73 @@
   flex-wrap: wrap;
 }
 
-.title h1 { margin: 0; font-size: 22px; }
-.subtitle { margin: 4px 0 0; color: #667085; }
+.title h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #667085;
+}
 
 .btn {
-  height: 38px;
+  min-height: 38px;
   border: 1px solid #eaecf0;
   border-radius: 12px;
-  padding: 0 12px;
+  padding: 8px 14px;
   background: #fff;
   cursor: pointer;
   font-weight: 800;
+}
+
+.btn:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn--primary {
+  background: #1f3cff;
+  color: #fff;
+  border-color: #1f3cff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #1732d4;
+}
+
+.btn--warning {
+  background: #fffaeb;
+  color: #b54708;
+  border-color: #fedf89;
+}
+
+.btn--warning:hover:not(:disabled) {
+  background: #fef0c7;
+}
+
+.btn--danger {
+  background: #d92d20;
+  color: #fff;
+  border-color: #d92d20;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #b42318;
+}
+
+.btn--danger-outline {
+  color: #b42318;
+  background: #fff;
+  border-color: #fda29b;
+}
+
+.btn--danger-outline:hover:not(:disabled) {
+  background: #fef3f2;
 }
 
 .card {
@@ -29,7 +85,7 @@
   border: 1px solid #eaecf0;
   border-radius: 14px;
   padding: 16px;
-  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
   margin-top: 16px;
 }
 
@@ -41,8 +97,14 @@
   flex-wrap: wrap;
 }
 
-.header h2 { margin: 0; }
-.muted { color: #667085; margin: 6px 0 0; }
+.header h2 {
+  margin: 0;
+}
+
+.muted {
+  color: #667085;
+  margin: 6px 0 0;
+}
 
 .grid {
   display: grid;
@@ -62,11 +124,353 @@
   background: #fcfcfd;
 }
 
-.label { color: #667085; font-size: 12px; font-weight: 800; }
-.value { margin-top: 6px; font-weight: 800; }
+.label {
+  color: #667085;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.value {
+  margin-top: 6px;
+  font-weight: 800;
+}
+
+
+/* =========================
+   ENTREGA INTERROMPIDA
+   ========================= */
+
+.ocorrencia-status {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #fedf89;
+  border-radius: 14px;
+  background: #fffaeb;
+}
+
+.ocorrencia-status__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #fef0c7;
+  font-size: 18px;
+}
+
+.ocorrencia-status__conteudo h3 {
+  margin: 0;
+  color: #93370d;
+  font-size: 17px;
+}
+
+.ocorrencia-status__conteudo > p {
+  margin: 6px 0 0;
+  color: #7a2e0e;
+  line-height: 1.5;
+}
+
+.ocorrencia-status__motivo {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.65);
+  color: #7a2e0e;
+  line-height: 1.5;
+}
+
+.ocorrencia-status__acoes {
+  margin-top: 16px;
+}
+
+.acao-ajuda {
+  margin: 10px 0 0;
+  color: #7a2e0e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   FINALIZAÇÃO
+   ========================= */
+
+.finalizacao-form {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #fedf89;
+}
+
+.alerta-finalizacao {
+  padding: 12px 14px;
+  border: 1px solid #fecdca;
+  border-radius: 10px;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.alerta-finalizacao p {
+  margin: 5px 0 0;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   NOTAS FISCAIS
+   ========================= */
+
+.notas-fiscais {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eaecf0;
+}
+
+.notas-fiscais__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.notas-fiscais__header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.notas-fiscais__instrucao {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.notas-fiscais__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nota-fiscal {
+  padding: 16px;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #fcfcfd;
+}
+
+.nota-fiscal__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nota-fiscal__identificacao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.nota-fiscal__identificacao strong {
+  color: #101828;
+  font-size: 15px;
+}
+
+.nota-fiscal__identificacao .muted {
+  margin: 0;
+}
+
+.nota-fiscal__justificativa {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #eaecf0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   RESULTADO DA NF
+   ========================= */
+
+.resultado {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eaecf0;
+}
+
+.resultado__titulo {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.resultado__opcoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.resultado-opcao {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  background: #fff;
+  color: #344054;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+}
+
+.resultado-opcao:hover {
+  background: #f9fafb;
+  border-color: #98a2b3;
+}
+
+.resultado-opcao--sucesso {
+  color: #027a48;
+  border-color: #abefc6;
+  background: #ecfdf3;
+}
+
+.resultado-opcao--problema {
+  color: #b42318;
+  border-color: #fecdca;
+  background: #fef3f2;
+}
+
+.campo {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.campo label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.campo select,
+.campo textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #fff;
+  color: #101828;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.campo select:focus,
+.campo textarea:focus {
+  outline: 2px solid rgba(31, 60, 255, 0.14);
+  border-color: #1f3cff;
+}
+
+.campo textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.resultado__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================
+   OCORRÊNCIA
+   ========================= */
+
+.ocorrencia {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eaecf0;
+}
+
+.ocorrencia__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #fedf89;
+  border-radius: 12px;
+  background: #fffcf5;
+}
+
+.ocorrencia__cabecalho h3,
+.ocorrencia-form h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #344054;
+}
+
+.ocorrencia__cabecalho p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ocorrencia-form {
+  padding: 16px;
+  border: 1px solid #fedf89;
+  border-radius: 12px;
+  background: #fffcf5;
+}
+
+.ocorrencia-form__descricao {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   FEEDBACK
+   ========================= */
+
+.feedback {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.feedback--sucesso {
+  color: #027a48;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.feedback--erro {
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+}
+
+
+/* =========================
+   LINHA DO TEMPO
+   ========================= */
 
 .timeline {
-  margin-top: 16px;
+  margin-top: 20px;
   display: grid;
   gap: 12px;
 }
@@ -86,9 +490,15 @@
   margin-top: 4px;
 }
 
-.step__title { font-weight: 900; }
+.step__title {
+  font-weight: 900;
+}
 
-/* status pills */
+
+/* =========================
+   STATUS PILLS
+   ========================= */
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -99,8 +509,90 @@
   border: 1px solid transparent;
 }
 
-.pill--ok { background:#ecfdf3; color:#027a48; border-color:#abefc6; }
-.pill--info { background:#eff8ff; color:#175cd3; border-color:#b2ddff; }
-.pill--warn { background:#fffaeb; color:#b54708; border-color:#fedf89; }
-.pill--danger { background:#fef3f2; color:#b42318; border-color:#fecdca; }
-.pill--neutral { background:#f2f4f7; color:#344054; border-color:#eaecf0; }
+.pill--ok {
+  background: #ecfdf3;
+  color: #027a48;
+  border-color: #abefc6;
+}
+
+.pill--info {
+  background: #eff8ff;
+  color: #175cd3;
+  border-color: #b2ddff;
+}
+
+.pill--warn {
+  background: #fffaeb;
+  color: #b54708;
+  border-color: #fedf89;
+}
+
+.pill--danger {
+  background: #fef3f2;
+  color: #b42318;
+  border-color: #fecdca;
+}
+
+.pill--neutral {
+  background: #f2f4f7;
+  color: #344054;
+  border-color: #eaecf0;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 600px) {
+
+  .page {
+    padding: 0 0 20px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .nota-fiscal__cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nota-fiscal__cabecalho .pill {
+    align-self: flex-start;
+  }
+
+  .resultado__opcoes {
+    grid-template-columns: 1fr;
+  }
+
+  .resultado__acoes {
+    flex-direction: column-reverse;
+  }
+
+  .resultado__acoes .btn {
+    width: 100%;
+  }
+
+  .ocorrencia__cabecalho {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ocorrencia__cabecalho .btn {
+    width: 100%;
+  }
+
+  .ocorrencia-status {
+    grid-template-columns: 1fr;
+  }
+
+  .ocorrencia-status__icone {
+    margin-bottom: 2px;
+  }
+
+  .ocorrencia-status__acoes .btn {
+    width: 100%;
+  }
+}

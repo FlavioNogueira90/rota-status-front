@@ -1,77 +1,790 @@
 <div class="page">
+
   <div class="top">
-    <button class="btn" (click)="voltar()">← Voltar</button>
+
+    <button
+      class="btn"
+      (click)="voltar()">
+      ← Voltar
+    </button>
 
     <div class="title">
+
       <h1>Detalhe da Entrega</h1>
-      <p class="subtitle">Manifesto #{{ numeroManifesto }} • Entrega #{{ numeroEntrega }}</p>
+
+      <p class="subtitle">
+        Manifesto #{{ numeroManifesto }}
+        •
+        Entrega #{{ numeroEntrega }}
+      </p>
+
     </div>
+
   </div>
 
-  <section class="card" *ngIf="entrega$ | async as e; else notFound">
+
+  <section
+    class="card"
+    *ngIf="entrega$ | async as e; else notFound">
+
+
+    <!-- CABEÇALHO -->
+
     <div class="header">
+
       <div>
-        <h2>{{ e.clienteNome }}</h2>
-        <p class="muted">{{ e.endereco }}</p>
+
+        <h2>
+          {{ e.clienteNome }}
+        </h2>
+
+        <p class="muted">
+          {{ e.endereco }}
+        </p>
+
       </div>
 
-      <span class="pill" [ngClass]="pillClass(e.status)">{{ e.status }}</span>
+      <span
+        class="pill"
+        [ngClass]="pillClass(e.status)">
+        {{ e.status }}
+      </span>
+
     </div>
+
+
+    <!-- INFORMAÇÕES -->
 
     <div class="grid">
-      <div class="info">
-        <div class="label">Iniciada em</div>
-        <div class="value">{{ formatarData(e.iniciadaEm) }}</div>
-      </div>
 
       <div class="info">
-        <div class="label">Chegada no cliente</div>
-        <div class="value">{{ formatarData(e.chegadaEm) }}</div>
+
+        <div class="label">
+          Iniciada em
+        </div>
+
+        <div class="value">
+          {{ formatarData(e.iniciadaEm) }}
+        </div>
+
       </div>
 
-      <div class="info">
-        <div class="label">Concluída em</div>
-        <div class="value">{{ formatarData(e.concluidaEm) }}</div>
-      </div>
 
       <div class="info">
-        <div class="label">Motivo devolução</div>
-        <div class="value">{{ e.motivoDevolucao || '-' }}</div>
+
+        <div class="label">
+          Chegada no cliente
+        </div>
+
+        <div class="value">
+          {{ formatarData(e.chegadaEm) }}
+        </div>
+
       </div>
+
+
+      <div class="info">
+
+        <div class="label">
+          Concluída em
+        </div>
+
+        <div class="value">
+          {{ formatarData(e.concluidaEm) }}
+        </div>
+
+      </div>
+
     </div>
+
+
+    <!-- ===================================================
+         ENTREGA INTERROMPIDA
+         =================================================== -->
+
+    <section
+      *ngIf="e.status === 'INTERROMPIDA'"
+      class="ocorrencia-status">
+
+      <div class="ocorrencia-status__icone">
+        ⚠
+      </div>
+
+      <div class="ocorrencia-status__conteudo">
+
+        <h3>
+          Entrega interrompida
+        </h3>
+
+        <p>
+          Foi registrada uma ocorrência nesta entrega.
+          As notas fiscais pendentes foram preservadas e
+          poderão ser processadas em uma nova tentativa.
+        </p>
+
+        <div
+          *ngIf="e.justificativaStatus"
+          class="ocorrencia-status__motivo">
+
+          <strong>
+            Ocorrência:
+          </strong>
+
+          {{ e.justificativaStatus }}
+
+        </div>
+
+
+        <div
+          *ngIf="sucessoOcorrencia"
+          class="feedback feedback--sucesso">
+          {{ sucessoOcorrencia }}
+        </div>
+
+
+        <!-- FINALIZAR SEM NOVA TENTATIVA -->
+
+        <div
+          *ngIf="!formularioFinalizacaoAberto"
+          class="ocorrencia-status__acoes">
+
+          <button
+            type="button"
+            class="btn btn--danger-outline"
+            (click)="abrirFormularioFinalizacao()">
+            Encerrar sem nova tentativa
+          </button>
+
+          <p class="acao-ajuda">
+            Para tentar novamente, volte para a rota e utilize
+            a opção <strong>Retomar entrega</strong>.
+          </p>
+
+        </div>
+
+
+        <div
+          *ngIf="formularioFinalizacaoAberto"
+          class="finalizacao-form">
+
+          <div class="alerta-finalizacao">
+
+            <strong>
+              Atenção
+            </strong>
+
+            <p>
+              Ao encerrar esta entrega, todas as notas fiscais
+              que ainda estiverem pendentes serão registradas
+              como <strong>não realizadas</strong>.
+            </p>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="motivo-finalizacao">
+              Motivo da não realização
+            </label>
+
+            <select
+              id="motivo-finalizacao"
+              [(ngModel)]="motivoFinalizacao">
+
+              <option [ngValue]="null">
+                Selecione o motivo
+              </option>
+
+              <option
+                *ngFor="let motivo of motivosNaoRealizacao"
+                [ngValue]="motivo.valor">
+                {{ motivo.label }}
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="justificativa-finalizacao">
+              Justificativa
+            </label>
+
+            <textarea
+              id="justificativa-finalizacao"
+              [(ngModel)]="justificativaFinalizacao"
+              rows="3"
+              placeholder="Informe detalhes adicionais, se necessário">
+            </textarea>
+
+          </div>
+
+
+          <div
+            *ngIf="erroFinalizacao"
+            class="feedback feedback--erro">
+            {{ erroFinalizacao }}
+          </div>
+
+
+          <div class="resultado__acoes">
+
+            <button
+              type="button"
+              class="btn"
+              [disabled]="finalizandoSemNovaTentativa"
+              (click)="cancelarFinalizacao()">
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              class="btn btn--danger"
+              [disabled]="
+                !motivoFinalizacao ||
+                finalizandoSemNovaTentativa
+              "
+              (click)="finalizarSemNovaTentativa()">
+
+              {{
+                finalizandoSemNovaTentativa
+                  ? 'Encerrando...'
+                  : 'Confirmar encerramento'
+              }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         NOTAS FISCAIS
+         =================================================== -->
+
+    <section class="notas-fiscais">
+
+      <div class="notas-fiscais__header">
+
+        <div>
+
+          <h3>
+            Notas Fiscais
+          </h3>
+
+          <p
+            *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'"
+            class="notas-fiscais__instrucao">
+            Informe o resultado de cada nota fiscal recebida pelo cliente.
+          </p>
+
+          <p
+            *ngIf="e.status === 'INTERROMPIDA'"
+            class="notas-fiscais__instrucao">
+            As notas fiscais pendentes estão preservadas enquanto
+            a entrega estiver interrompida.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        *ngIf="sucessoResultado"
+        class="feedback feedback--sucesso">
+        {{ sucessoResultado }}
+      </div>
+
+
+      <div
+        *ngIf="erroResultado"
+        class="feedback feedback--erro">
+        {{ erroResultado }}
+      </div>
+
+
+      <ng-container
+        *ngIf="notasFiscais$ | async as notas">
+
+
+        <div
+          *ngIf="notas.length > 0; else semNotas"
+          class="notas-fiscais__lista">
+
+
+          <article
+            *ngFor="let nota of notas"
+            class="nota-fiscal">
+
+
+            <div class="nota-fiscal__cabecalho">
+
+              <div class="nota-fiscal__identificacao">
+
+                <strong>
+                  NF {{ nota.numero }}
+                </strong>
+
+                <span
+                  *ngIf="nota.serie"
+                  class="muted">
+                  • Série {{ nota.serie }}
+                </span>
+
+              </div>
+
+
+              <span
+                class="pill"
+                [ngClass]="pillNotaClass(nota.status)">
+                {{ statusNotaLabel(nota.status) }}
+              </span>
+
+            </div>
+
+
+            <div
+              *ngIf="nota.justificativa"
+              class="nota-fiscal__justificativa">
+              {{ nota.justificativa }}
+            </div>
+
+
+            <!-- RESULTADO DA NF -->
+
+            <div
+              *ngIf="podeRegistrarResultado(e, nota)"
+              class="resultado">
+
+
+              <ng-container
+                *ngIf="
+                  formularioNota(nota) as formulario;
+                  else escolherResultado
+                ">
+
+
+                <div class="resultado__titulo">
+
+                  Resultado selecionado:
+
+                  <strong>
+                    {{ resultadoLabel(formulario.status!) }}
+                  </strong>
+
+                </div>
+
+
+                <div
+                  *ngIf="exigeMotivoDevolucao(formulario)"
+                  class="campo">
+
+                  <label
+                    [for]="'motivo-devolucao-' + nota.id">
+                    Motivo
+                  </label>
+
+                  <select
+                    [id]="'motivo-devolucao-' + nota.id"
+                    [(ngModel)]="formulario.motivoDevolucao">
+
+                    <option [ngValue]="null">
+                      Selecione o motivo
+                    </option>
+
+                    <option
+                      *ngFor="let motivo of motivosDevolucao"
+                      [ngValue]="motivo.valor">
+                      {{ motivo.label }}
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div
+                  *ngIf="exigeMotivoNaoRealizacao(formulario)"
+                  class="campo">
+
+                  <label
+                    [for]="'motivo-nao-realizacao-' + nota.id">
+                    Motivo
+                  </label>
+
+                  <select
+                    [id]="'motivo-nao-realizacao-' + nota.id"
+                    [(ngModel)]="formulario.motivoNaoRealizacao">
+
+                    <option [ngValue]="null">
+                      Selecione o motivo
+                    </option>
+
+                    <option
+                      *ngFor="let motivo of motivosNaoRealizacao"
+                      [ngValue]="motivo.valor">
+                      {{ motivo.label }}
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div
+                  *ngIf="formulario.status !== 'ENTREGUE'"
+                  class="campo">
+
+                  <label
+                    [for]="'justificativa-' + nota.id">
+                    Observação
+                  </label>
+
+                  <textarea
+                    [id]="'justificativa-' + nota.id"
+                    [(ngModel)]="formulario.justificativa"
+                    rows="3"
+                    placeholder="Informe detalhes adicionais, se necessário">
+                  </textarea>
+
+                </div>
+
+
+                <div class="resultado__acoes">
+
+                  <button
+                    type="button"
+                    class="btn"
+                    [disabled]="salvandoNotaId === nota.id"
+                    (click)="cancelarResultado(nota)">
+                    Cancelar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn--primary"
+                    [disabled]="
+                      !podeConfirmarResultado(formulario) ||
+                      salvandoNotaId === nota.id
+                    "
+                    (click)="confirmarResultado(nota)">
+
+                    {{
+                      salvandoNotaId === nota.id
+                        ? 'Registrando...'
+                        : 'Confirmar resultado'
+                    }}
+
+                  </button>
+
+                </div>
+
+              </ng-container>
+
+
+              <ng-template #escolherResultado>
+
+                <div class="resultado__titulo">
+                  Resultado da NF
+                </div>
+
+                <div class="resultado__opcoes">
+
+                  <button
+                    type="button"
+                    class="resultado-opcao resultado-opcao--sucesso"
+                    (click)="selecionarResultado(nota, 'ENTREGUE')">
+                    Entregue
+                  </button>
+
+                  <button
+                    type="button"
+                    class="resultado-opcao"
+                    (click)="selecionarResultado(nota, 'ENTREGUE_PARCIAL')">
+                    Entregue parcialmente
+                  </button>
+
+                  <button
+                    type="button"
+                    class="resultado-opcao"
+                    (click)="selecionarResultado(nota, 'DEVOLVIDA')">
+                    Devolvida
+                  </button>
+
+                  <button
+                    type="button"
+                    class="resultado-opcao resultado-opcao--problema"
+                    (click)="selecionarResultado(nota, 'NAO_REALIZADA')">
+                    Não realizada
+                  </button>
+
+                </div>
+
+              </ng-template>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <ng-template #semNotas>
+
+          <p class="muted">
+            Nenhuma nota fiscal vinculada a esta entrega.
+          </p>
+
+        </ng-template>
+
+      </ng-container>
+
+    </section>
+
+
+    <!-- ===================================================
+         OCORRÊNCIA
+         =================================================== -->
+
+    <section
+      *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'"
+      class="ocorrencia">
+
+
+      <div
+        *ngIf="sucessoOcorrencia"
+        class="feedback feedback--sucesso">
+        {{ sucessoOcorrencia }}
+      </div>
+
+
+      <div
+        *ngIf="erroOcorrencia"
+        class="feedback feedback--erro">
+        {{ erroOcorrencia }}
+      </div>
+
+
+      <ng-container
+        *ngIf="!formularioOcorrenciaAberto; else formularioOcorrencia">
+
+
+        <div class="ocorrencia__cabecalho">
+
+          <div>
+
+            <h3>
+              Problema durante a entrega?
+            </h3>
+
+            <p>
+              Registre uma ocorrência caso seja necessário
+              interromper temporariamente esta entrega.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="btn btn--warning"
+            (click)="abrirFormularioOcorrencia()">
+            ⚠ Registrar ocorrência
+          </button>
+
+        </div>
+
+      </ng-container>
+
+
+      <ng-template #formularioOcorrencia>
+
+        <div class="ocorrencia-form">
+
+          <h3>
+            Registrar ocorrência
+          </h3>
+
+          <p class="ocorrencia-form__descricao">
+            A entrega será interrompida, mas as notas fiscais
+            ainda pendentes serão preservadas para uma nova tentativa.
+          </p>
+
+
+          <div class="campo">
+
+            <label for="motivo-ocorrencia">
+              Motivo da ocorrência
+            </label>
+
+            <select
+              id="motivo-ocorrencia"
+              [(ngModel)]="motivoOcorrencia">
+
+              <option [ngValue]="null">
+                Selecione o motivo
+              </option>
+
+              <option
+                *ngFor="let motivo of motivosOcorrencia"
+                [ngValue]="motivo.valor">
+                {{ motivo.label }}
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="observacao-ocorrencia">
+              Observação
+            </label>
+
+            <textarea
+              id="observacao-ocorrencia"
+              [(ngModel)]="observacaoOcorrencia"
+              rows="3"
+              placeholder="Informe detalhes adicionais, se necessário">
+            </textarea>
+
+          </div>
+
+
+          <div class="resultado__acoes">
+
+            <button
+              type="button"
+              class="btn"
+              [disabled]="registrandoOcorrencia"
+              (click)="cancelarOcorrencia()">
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              class="btn btn--warning"
+              [disabled]="
+                !motivoOcorrencia ||
+                registrandoOcorrencia
+              "
+              (click)="registrarOcorrencia()">
+
+              {{
+                registrandoOcorrencia
+                  ? 'Registrando...'
+                  : 'Confirmar ocorrência'
+              }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </ng-template>
+
+    </section>
+
+
+    <!-- ===================================================
+         LINHA DO TEMPO
+         =================================================== -->
 
     <div class="timeline">
-      <div class="step">
-        <div class="dot"></div>
-        <div>
-          <div class="step__title">Início</div>
-          <div class="muted">{{ formatarData(e.iniciadaEm) }}</div>
-        </div>
-      </div>
 
       <div class="step">
+
         <div class="dot"></div>
+
         <div>
-          <div class="step__title">Chegada</div>
-          <div class="muted">{{ formatarData(e.chegadaEm) }}</div>
+
+          <div class="step__title">
+            Início
+          </div>
+
+          <div class="muted">
+            {{ formatarData(e.iniciadaEm) }}
+          </div>
+
         </div>
+
       </div>
 
+
       <div class="step">
+
         <div class="dot"></div>
+
         <div>
-          <div class="step__title">Conclusão</div>
-          <div class="muted">{{ formatarData(e.concluidaEm) }}</div>
+
+          <div class="step__title">
+            Chegada
+          </div>
+
+          <div class="muted">
+            {{ formatarData(e.chegadaEm) }}
+          </div>
+
         </div>
+
       </div>
+
+
+      <div class="step">
+
+        <div class="dot"></div>
+
+        <div>
+
+          <div class="step__title">
+            Conclusão
+          </div>
+
+          <div class="muted">
+            {{ formatarData(e.concluidaEm) }}
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </section>
 
+
   <ng-template #notFound>
+
     <section class="card">
-      <h2>Entrega não encontrada</h2>
-      <p class="muted">Não foi possível localizar a entrega #{{ numeroEntrega }} neste manifesto.</p>
-      <button class="btn" (click)="voltar()">Voltar</button>
+
+      <h2>
+        Entrega não encontrada
+      </h2>
+
+      <p class="muted">
+        Não foi possível localizar a entrega
+        #{{ numeroEntrega }} neste manifesto.
+      </p>
+
+      <button
+        class="btn"
+        (click)="voltar()">
+        Voltar
+      </button>
+
     </section>
+
   </ng-template>
+
 </div>

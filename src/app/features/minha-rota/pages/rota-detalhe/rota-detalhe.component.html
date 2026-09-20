@@ -2,16 +2,18 @@
 
     <section class="page-header">
 
-        <button class="btn-voltar" (click)="voltar()">
+        <button
+            class="btn-voltar"
+            (click)="voltar()">
             ← Voltar
         </button>
 
         <div>
             <h1>
                 {{
-                rotaFinalizada
-                ? 'Rota concluída'
-                : 'Rota em andamento'
+                    rotaFinalizada
+                        ? 'Rota concluída'
+                        : 'Rota em andamento'
                 }}
             </h1>
 
@@ -19,32 +21,45 @@
                 Manifesto #{{ numeroManifesto }}
             </p>
         </div>
+
     </section>
 
-    <section *ngIf="carregando" class="state-card">
+    <section
+        *ngIf="carregando"
+        class="state-card">
         Carregando entregas...
     </section>
 
-    <section *ngIf="erro" class="state-card state-card--error">
+    <section
+        *ngIf="erro"
+        class="state-card state-card--error">
         {{ erro }}
     </section>
 
-    <section *ngIf="!carregando && !erro && rotaFinalizada" class="rota-concluida">
+    <section
+        *ngIf="!carregando && !erro && rotaFinalizada"
+        class="rota-concluida">
+
         <div class="rota-concluida__icone">
             ✓
         </div>
 
         <div>
-            <strong>Rota concluída com sucesso!</strong>
+            <strong>
+                Rota concluída com sucesso!
+            </strong>
 
             <p>
                 Todas as entregas deste manifesto foram finalizadas.
             </p>
         </div>
 
-        <button class="btn btn--primary" (click)="voltar()">
+        <button
+            class="btn btn--primary"
+            (click)="voltar()">
             Voltar para Minha Rota
         </button>
+
     </section>
 
     <ng-container *ngIf="!carregando && !erro">
@@ -53,7 +68,9 @@
 
             <div class="section-header">
 
-                <h2>Entregas</h2>
+                <h2>
+                    Entregas
+                </h2>
 
                 <span>
                     {{ entregas.length }}
@@ -64,7 +81,10 @@
 
             <div class="entregas-lista">
 
-                <article class="entrega-card" *ngFor="let entrega of entregas" [ngClass]="statusClass(entrega.status)">
+                <article
+                    class="entrega-card"
+                    *ngFor="let entrega of entregas"
+                    [ngClass]="statusClass(entrega.status)">
 
                     <div class="entrega-card__header">
 
@@ -92,44 +112,72 @@
 
                     <div class="entrega-card__actions">
 
-                        <button *ngIf="entrega.status === 'PENDENTE'" class="btn btn--primary"
-                            [disabled]="iniciandoEntrega === entrega.numero" (click)="iniciarEntrega(entrega)">
-                            {{
-                            iniciandoEntrega === entrega.numero
-                            ? 'Iniciando entrega...'
-                            : 'Iniciar entrega'
-                            }}
+                        <!--
+                            O motorista pode consultar detalhes
+                            enquanto a entrega estiver operacional.
+                        -->
+                        <button
+                            *ngIf="
+                                entrega.status !== 'CONCLUIDO' &&
+                                entrega.status !== 'CONCLUIDO_COM_APONTAMENTOS'
+                            "
+                            class="btn"
+                            (click)="abrirEntrega(entrega)">
+                            Ver detalhes
                         </button>
 
-                        <button *ngIf="entrega.status === 'INTERROMPIDA'" class="btn btn--primary"
-                            [disabled]="iniciandoEntrega === entrega.numero" (click)="iniciarEntrega(entrega)">
+                        <button
+                            *ngIf="entrega.status === 'PENDENTE'"
+                            class="btn btn--primary"
+                            [disabled]="iniciandoEntrega === entrega.numero"
+                            (click)="iniciarEntrega(entrega)">
+
                             {{
-                            iniciandoEntrega === entrega.numero
-                            ? 'Retomando entrega...'
-                            : 'Retomar entrega'
+                                iniciandoEntrega === entrega.numero
+                                    ? 'Iniciando entrega...'
+                                    : 'Iniciar entrega'
                             }}
+
                         </button>
 
-                        <button *ngIf="entrega.status === 'EM_TRANSITO'" class="btn btn--primary"
-                            [disabled]="registrandoChegada === entrega.numero" (click)="registrarChegada(entrega)">
+                        <button
+                            *ngIf="entrega.status === 'INTERROMPIDA'"
+                            class="btn btn--primary"
+                            [disabled]="iniciandoEntrega === entrega.numero"
+                            (click)="iniciarEntrega(entrega)">
+
                             {{
-                            registrandoChegada === entrega.numero
-                            ? 'Registrando chegada...'
-                            : 'Cheguei ao destino'
+                                iniciandoEntrega === entrega.numero
+                                    ? 'Retomando entrega...'
+                                    : 'Retomar entrega'
                             }}
+
                         </button>
 
-                        <button *ngIf="entrega.status === 'AGUARDANDO_RECEBIMENTO'" class="btn btn--primary"
-                            [disabled]="concluindoEntrega === entrega.numero" (click)="concluirEntrega(entrega)">
+                        <button
+                            *ngIf="entrega.status === 'EM_TRANSITO'"
+                            class="btn btn--primary"
+                            [disabled]="registrandoChegada === entrega.numero"
+                            (click)="registrarChegada(entrega)">
+
                             {{
-                            concluindoEntrega === entrega.numero
-                            ? 'Confirmando entrega...'
-                            : 'Confirmar entrega'
+                                registrandoChegada === entrega.numero
+                                    ? 'Registrando chegada...'
+                                    : 'Cheguei ao destino'
                             }}
+
                         </button>
 
-                        <span *ngIf="entrega.status === 'ENTREGUE'" class="entrega-concluida">
+                        <span
+                            *ngIf="entrega.status === 'CONCLUIDO'"
+                            class="entrega-concluida">
                             ✓ Entrega concluída
+                        </span>
+
+                        <span
+                            *ngIf="entrega.status === 'CONCLUIDO_COM_APONTAMENTOS'"
+                            class="entrega-concluida">
+                            ⚠ Entrega concluída com apontamentos
                         </span>
 
                     </div>
@@ -140,7 +188,9 @@
 
         </section>
 
-        <section *ngIf="entregas.length === 0" class="state-card">
+        <section
+            *ngIf="entregas.length === 0"
+            class="state-card">
             Nenhuma entrega encontrada para este manifesto.
         </section>
 
