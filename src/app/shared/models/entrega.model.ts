@@ -7,6 +7,7 @@ export type StatusEntrega =
   | 'CONCLUIDO_COM_APONTAMENTOS';
 
 export interface Entrega {
+  id: string;
   numero: number;
   clienteNome: string;
   endereco: string;

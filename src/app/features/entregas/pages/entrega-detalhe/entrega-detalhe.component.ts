@@ -7,6 +7,7 @@ import {
   RouterModule
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import {
   EntregasService,
@@ -24,6 +25,11 @@ import {
   MotivoDevolucao,
   MotivoNaoRealizacao
 } from '../../../../shared/models/entrega-nota-fiscal.model';
+
+import {
+  EntregaAnexo,
+  TipoEntregaAnexo
+} from '../../../../shared/models/entrega-anexo.model';
 
 
 type ResultadoSelecionavel =
@@ -69,6 +75,56 @@ export class EntregaDetalheComponent {
   entrega$!: Observable<Entrega | null>;
 
   notasFiscais$!: Observable<EntregaNotaFiscal[]>;
+
+
+  /* =====================================================
+     EVIDÊNCIAS / ANEXOS
+     ===================================================== */
+
+  anexosPorNota:
+    Record<string, EntregaAnexo[]> = {};
+
+  carregandoAnexos:
+    Record<string, boolean> = {};
+
+  formularioAnexoNotaId: string | null = null;
+
+  tipoAnexoSelecionado: TipoEntregaAnexo | null = null;
+
+  arquivoAnexoSelecionado: File | null = null;
+
+  enviandoAnexoNotaId: string | null = null;
+
+  erroAnexo = '';
+
+  sucessoAnexo = '';
+
+
+  readonly tiposAnexo: {
+    valor: TipoEntregaAnexo;
+    label: string;
+  }[] = [
+    {
+      valor: 'CANHOTO',
+      label: 'Canhoto / comprovante de entrega'
+    },
+    {
+      valor: 'FOTO_MERCADORIA',
+      label: 'Foto da mercadoria'
+    },
+    {
+      valor: 'FOTO_AVARIA',
+      label: 'Foto de avaria'
+    },
+    {
+      valor: 'FOTO_DEVOLUCAO',
+      label: 'Foto de devolução'
+    },
+    {
+      valor: 'OUTRO',
+      label: 'Outro'
+    }
+  ];
 
 
   /* =====================================================
@@ -274,6 +330,12 @@ export class EntregaDetalheComponent {
       this.entregasService.listarNotasFiscais(
         this.numeroManifesto,
         this.numeroEntrega
+      ).pipe(
+        tap((notas: EntregaNotaFiscal[]) => {
+          notas.forEach(nota =>
+            this.carregarAnexosNota(nota.id)
+          );
+        })
       );
   }
 
@@ -291,6 +353,335 @@ export class EntregaDetalheComponent {
       '/minha-rota',
       this.numeroManifesto
     ]);
+  }
+
+
+  /* =====================================================
+     EVIDÊNCIAS / ANEXOS
+     ===================================================== */
+
+  podeAdicionarEvidencia(
+    entrega: Entrega,
+    nota: EntregaNotaFiscal
+  ): boolean {
+
+    return (
+      nota.status === 'PENDENTE' &&
+      (
+        entrega.status === 'EM_TRANSITO' ||
+        entrega.status === 'AGUARDANDO_RECEBIMENTO' ||
+        entrega.status === 'INTERROMPIDA'
+      )
+    );
+  }
+
+
+  anexosNota(
+    nota: EntregaNotaFiscal
+  ): EntregaAnexo[] {
+
+    return this.anexosPorNota[nota.id] || [];
+  }
+
+
+  abrirFormularioAnexo(
+    nota: EntregaNotaFiscal
+  ): void {
+
+    this.formularioAnexoNotaId = nota.id;
+
+    this.tipoAnexoSelecionado = null;
+    this.arquivoAnexoSelecionado = null;
+
+    this.erroAnexo = '';
+    this.sucessoAnexo = '';
+  }
+
+
+  cancelarFormularioAnexo(): void {
+
+    this.formularioAnexoNotaId = null;
+
+    this.tipoAnexoSelecionado = null;
+    this.arquivoAnexoSelecionado = null;
+
+    this.erroAnexo = '';
+  }
+
+
+  selecionarArquivoAnexo(
+    event: Event
+  ): void {
+
+    const input =
+      event.target as HTMLInputElement;
+
+    const arquivo =
+      input.files?.[0] || null;
+
+    this.erroAnexo = '';
+
+    if (!arquivo) {
+      this.arquivoAnexoSelecionado = null;
+      return;
+    }
+
+    const tiposPermitidos = [
+      'image/jpeg',
+      'image/png',
+      'application/pdf'
+    ];
+
+    if (!tiposPermitidos.includes(arquivo.type)) {
+
+      this.arquivoAnexoSelecionado = null;
+
+      this.erroAnexo =
+        'Formato inválido. Selecione uma imagem JPG/PNG ou um arquivo PDF.';
+
+      input.value = '';
+
+      return;
+    }
+
+    const limiteBytes =
+      10 * 1024 * 1024;
+
+    if (arquivo.size > limiteBytes) {
+
+      this.arquivoAnexoSelecionado = null;
+
+      this.erroAnexo =
+        'O arquivo excede o limite máximo de 10 MB.';
+
+      input.value = '';
+
+      return;
+    }
+
+    this.arquivoAnexoSelecionado =
+      arquivo;
+  }
+
+
+  enviarAnexo(
+    entrega: Entrega,
+    nota: EntregaNotaFiscal
+  ): void {
+
+    if (
+      !this.tipoAnexoSelecionado ||
+      !this.arquivoAnexoSelecionado
+    ) {
+
+      this.erroAnexo =
+        'Selecione o tipo da evidência e o arquivo antes de enviar.';
+
+      return;
+    }
+
+    this.enviandoAnexoNotaId =
+      nota.id;
+
+    this.erroAnexo = '';
+    this.sucessoAnexo = '';
+
+    this.entregasService
+      .adicionarAnexo(
+        entrega.id,
+        nota.id,
+        this.tipoAnexoSelecionado,
+        this.arquivoAnexoSelecionado
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.enviandoAnexoNotaId = null;
+
+          this.formularioAnexoNotaId = null;
+
+          this.tipoAnexoSelecionado = null;
+          this.arquivoAnexoSelecionado = null;
+
+          this.sucessoAnexo =
+            `Evidência da NF ${nota.numero} enviada com sucesso.`;
+
+          this.carregarAnexosNota(
+            nota.id
+          );
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao enviar evidência:',
+            erro
+          );
+
+          this.enviandoAnexoNotaId = null;
+
+          this.erroAnexo =
+            erro?.error?.message ||
+            erro?.error?.mensagem ||
+            'Não foi possível enviar a evidência.';
+        }
+      });
+  }
+
+
+  baixarAnexo(
+    anexo: EntregaAnexo
+  ): void {
+
+    this.erroAnexo = '';
+
+    this.entregasService
+      .baixarAnexo(
+        anexo.id
+      )
+      .subscribe({
+
+        next: (arquivo: Blob) => {
+
+          const url =
+            URL.createObjectURL(arquivo);
+
+          const link =
+            document.createElement('a');
+
+          link.href = url;
+
+          link.download =
+            anexo.nomeArquivo;
+
+          document.body.appendChild(link);
+
+          link.click();
+
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(url);
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao baixar evidência:',
+            erro
+          );
+
+          this.erroAnexo =
+            erro?.error?.message ||
+            erro?.error?.mensagem ||
+            'Não foi possível baixar a evidência.';
+        }
+      });
+  }
+
+
+  tipoAnexoLabel(
+    tipo: TipoEntregaAnexo
+  ): string {
+
+    if (
+      tipo === 'CANHOTO' ||
+      tipo === 'COMPROVANTE_ENTREGA'
+    ) {
+      return 'Canhoto / comprovante de entrega';
+    }
+
+    return (
+      this.tiposAnexo.find(
+        item => item.valor === tipo
+      )?.label || tipo
+    );
+  }
+
+
+  possuiComprovanteEntrega(
+    nota: EntregaNotaFiscal
+  ): boolean {
+
+    return this.anexosNota(nota).some(
+      anexo =>
+        anexo.tipo === 'CANHOTO' ||
+        anexo.tipo === 'COMPROVANTE_ENTREGA'
+    );
+  }
+
+
+  exigeComprovanteEntrega(
+    formulario: FormularioResultadoNota
+  ): boolean {
+
+    return (
+      formulario.status === 'ENTREGUE' ||
+      formulario.status === 'ENTREGUE_PARCIAL'
+    );
+  }
+
+
+  formatarTamanhoArquivo(
+    tamanhoBytes: number
+  ): string {
+
+    if (tamanhoBytes < 1024) {
+      return `${tamanhoBytes} B`;
+    }
+
+    if (tamanhoBytes < 1024 * 1024) {
+      return `${(tamanhoBytes / 1024).toFixed(1)} KB`;
+    }
+
+    return `${(
+      tamanhoBytes /
+      (1024 * 1024)
+    ).toFixed(1)} MB`;
+  }
+
+
+  private carregarAnexosNota(
+    entregaNotaFiscalId: string
+  ): void {
+
+    this.carregandoAnexos[
+      entregaNotaFiscalId
+    ] = true;
+
+    this.entregasService
+      .listarAnexosPorNotaFiscal(
+        entregaNotaFiscalId
+      )
+      .subscribe({
+
+        next: (anexos: EntregaAnexo[]) => {
+
+          this.anexosPorNota[
+            entregaNotaFiscalId
+          ] = anexos;
+
+          this.carregandoAnexos[
+            entregaNotaFiscalId
+          ] = false;
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar evidências da NF:',
+            erro
+          );
+
+          this.anexosPorNota[
+            entregaNotaFiscalId
+          ] = [];
+
+          this.carregandoAnexos[
+            entregaNotaFiscalId
+          ] = false;
+        }
+      });
   }
 
 
@@ -408,6 +799,17 @@ export class EntregaDetalheComponent {
 
       this.erroResultado =
         'Preencha os campos obrigatórios antes de confirmar.';
+
+      return;
+    }
+
+    if (
+      this.exigeComprovanteEntrega(formulario) &&
+      !this.possuiComprovanteEntrega(nota)
+    ) {
+
+      this.erroResultado =
+        'Para concluir a NF como entregue ou entregue parcialmente, anexe primeiro o canhoto/comprovante de entrega.';
 
       return;
     }

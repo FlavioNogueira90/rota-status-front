@@ -13,6 +13,11 @@ import {
   MotivoNaoRealizacao
 } from '../../shared/models/entrega-nota-fiscal.model';
 
+import {
+  EntregaAnexo,
+  TipoEntregaAnexo
+} from '../../shared/models/entrega-anexo.model';
+
 
 export interface IniciarEntregaResponse {
   mensagem: string;
@@ -214,6 +219,92 @@ export class EntregasService {
     return this.http.post<void>(
       `${this.baseUrl}/manifestos/${numeroManifesto}/entregas/${numeroEntrega}/finalizar-sem-nova-tentativa`,
       payload
+    );
+  }
+
+
+  /* =======================================================
+     EVIDÊNCIAS / ANEXOS
+     ======================================================= */
+
+  adicionarAnexo(
+    entregaId: string,
+    entregaNotaFiscalId: string | null,
+    tipo: TipoEntregaAnexo,
+    arquivo: File
+  ): Observable<EntregaAnexo> {
+
+    const formData = new FormData();
+
+    formData.append(
+      'entregaId',
+      entregaId
+    );
+
+    if (entregaNotaFiscalId) {
+      formData.append(
+        'entregaNotaFiscalId',
+        entregaNotaFiscalId
+      );
+    }
+
+    formData.append(
+      'tipo',
+      tipo
+    );
+
+    formData.append(
+      'arquivo',
+      arquivo,
+      arquivo.name
+    );
+
+    return this.http.post<EntregaAnexo>(
+      `${this.baseUrl}/entregas/anexos`,
+      formData
+    );
+  }
+
+
+  listarAnexosPorEntrega(
+    entregaId: string
+  ): Observable<EntregaAnexo[]> {
+
+    return this.http.get<EntregaAnexo[]>(
+      `${this.baseUrl}/entregas/anexos/entrega/${entregaId}`
+    );
+  }
+
+
+  listarAnexosPorNotaFiscal(
+    entregaNotaFiscalId: string
+  ): Observable<EntregaAnexo[]> {
+
+    return this.http.get<EntregaAnexo[]>(
+      `${this.baseUrl}/entregas/anexos/nota-fiscal/${entregaNotaFiscalId}`
+    );
+  }
+
+
+  baixarAnexo(
+    anexoId: string
+  ): Observable<Blob> {
+
+    return this.http.get(
+      `${this.baseUrl}/entregas/anexos/${anexoId}/download`,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+
+  excluirAnexo(
+    anexoId: string
+  ): Observable<void> {
+
+    return this.http.delete<void>(
+      `${this.baseUrl}/entregas/anexos/${anexoId}`
     );
   }
 

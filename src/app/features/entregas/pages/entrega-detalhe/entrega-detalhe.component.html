@@ -312,6 +312,20 @@
       </div>
 
 
+      <div
+        *ngIf="sucessoAnexo"
+        class="feedback feedback--sucesso">
+        {{ sucessoAnexo }}
+      </div>
+
+
+      <div
+        *ngIf="erroAnexo && !formularioAnexoNotaId"
+        class="feedback feedback--erro">
+        {{ erroAnexo }}
+      </div>
+
+
       <ng-container
         *ngIf="notasFiscais$ | async as notas">
 
@@ -357,6 +371,247 @@
               class="nota-fiscal__justificativa">
               {{ nota.justificativa }}
             </div>
+
+
+            <!-- EVIDÊNCIAS DA NF -->
+
+            <section class="evidencias">
+
+              <div class="evidencias__cabecalho">
+
+                <div>
+
+                  <div class="evidencias__titulo">
+                    📎 Evidências
+                    <span class="evidencias__contador">
+                      ({{ anexosNota(nota).length }})
+                    </span>
+                  </div>
+
+                  <p class="evidencias__ajuda">
+                    Canhotos, comprovantes, fotos da mercadoria,
+                    avarias ou devoluções desta nota fiscal.
+                  </p>
+
+                </div>
+
+
+                <button
+                  *ngIf="
+                    podeAdicionarEvidencia(e, nota) &&
+                    formularioAnexoNotaId !== nota.id
+                  "
+                  type="button"
+                  class="btn btn--evidencia"
+                  (click)="abrirFormularioAnexo(nota)">
+                  + Adicionar evidência
+                </button>
+
+              </div>
+
+
+              <div
+                *ngIf="carregandoAnexos[nota.id]"
+                class="evidencias__vazio">
+                Carregando evidências...
+              </div>
+
+
+              <div
+                *ngIf="
+                  !carregandoAnexos[nota.id] &&
+                  anexosNota(nota).length > 0
+                "
+                class="evidencias__lista">
+
+                <div
+                  *ngFor="let anexo of anexosNota(nota)"
+                  class="evidencia-item">
+
+                  <div class="evidencia-item__conteudo">
+
+                    <div class="evidencia-item__tipo">
+                      {{ tipoAnexoLabel(anexo.tipo) }}
+                    </div>
+
+                    <div class="evidencia-item__arquivo">
+                      {{ anexo.nomeArquivo }}
+                    </div>
+
+                    <div class="evidencia-item__meta">
+                      {{ formatarTamanhoArquivo(anexo.tamanhoBytes) }}
+                      •
+                      {{ formatarData(anexo.criadoEm) }}
+                    </div>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn--arquivo"
+                    (click)="baixarAnexo(anexo)">
+                    Baixar
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <div
+                *ngIf="
+                  !carregandoAnexos[nota.id] &&
+                  anexosNota(nota).length === 0 &&
+                  formularioAnexoNotaId !== nota.id
+                "
+                class="evidencias__vazio">
+                Nenhuma evidência anexada a esta NF.
+              </div>
+
+
+              <div
+                *ngIf="formularioAnexoNotaId === nota.id"
+                class="evidencia-form">
+
+                <div class="campo">
+
+                  <label
+                    [for]="'tipo-anexo-' + nota.id">
+                    Tipo da evidência
+                  </label>
+
+                  <select
+                    [id]="'tipo-anexo-' + nota.id"
+                    [(ngModel)]="tipoAnexoSelecionado">
+
+                    <option [ngValue]="null">
+                      Selecione o tipo
+                    </option>
+
+                    <option
+                      *ngFor="let tipo of tiposAnexo"
+                      [ngValue]="tipo.valor">
+                      {{ tipo.label }}
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div class="evidencia-form__arquivos">
+
+                  <label
+                    class="arquivo-opcao"
+                    [for]="'camera-anexo-' + nota.id">
+
+                    <span class="arquivo-opcao__icone">
+                      📷
+                    </span>
+
+                    <span>
+                      <strong>Tirar foto</strong>
+                      <small>Usar a câmera do celular</small>
+                    </span>
+
+                  </label>
+
+                  <input
+                    #cameraInput
+                    class="arquivo-input"
+                    type="file"
+                    [id]="'camera-anexo-' + nota.id"
+                    accept="image/jpeg,image/png"
+                    capture="environment"
+                    (change)="selecionarArquivoAnexo($event)">
+
+
+                  <label
+                    class="arquivo-opcao"
+                    [for]="'arquivo-anexo-' + nota.id">
+
+                    <span class="arquivo-opcao__icone">
+                      📁
+                    </span>
+
+                    <span>
+                      <strong>Escolher arquivo</strong>
+                      <small>JPG, PNG ou PDF • máximo 10 MB</small>
+                    </span>
+
+                  </label>
+
+                  <input
+                    #arquivoInput
+                    class="arquivo-input"
+                    type="file"
+                    [id]="'arquivo-anexo-' + nota.id"
+                    accept="image/jpeg,image/png,application/pdf"
+                    (change)="selecionarArquivoAnexo($event)">
+
+                </div>
+
+
+                <div
+                  *ngIf="arquivoAnexoSelecionado"
+                  class="arquivo-selecionado">
+
+                  <strong>
+                    Arquivo selecionado:
+                  </strong>
+
+                  <span>
+                    {{ arquivoAnexoSelecionado.name }}
+                    •
+                    {{ formatarTamanhoArquivo(arquivoAnexoSelecionado.size) }}
+                  </span>
+
+                </div>
+
+
+                <div
+                  *ngIf="
+                    erroAnexo &&
+                    formularioAnexoNotaId === nota.id
+                  "
+                  class="feedback feedback--erro evidencia-form__feedback">
+                  {{ erroAnexo }}
+                </div>
+
+
+                <div class="resultado__acoes">
+
+                  <button
+                    type="button"
+                    class="btn"
+                    [disabled]="enviandoAnexoNotaId === nota.id"
+                    (click)="cancelarFormularioAnexo()">
+                    Cancelar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn--primary"
+                    [disabled]="
+                      !tipoAnexoSelecionado ||
+                      !arquivoAnexoSelecionado ||
+                      enviandoAnexoNotaId === nota.id
+                    "
+                    (click)="enviarAnexo(e, nota)">
+
+                    {{
+                      enviandoAnexoNotaId === nota.id
+                        ? 'Enviando...'
+                        : 'Enviar evidência'
+                    }}
+
+                  </button>
+
+                </div>
+
+              </div>
+
+            </section>
 
 
             <!-- RESULTADO DA NF -->
