@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://rota-status-service-production.up.railway.app'
+  apiUrl: 'https://rotaone-api-prod-gue7hah8ewc9bsbq.centralus-01.azurewebsites.net'
 };
