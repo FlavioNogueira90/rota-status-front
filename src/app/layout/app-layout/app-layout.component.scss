@@ -51,12 +51,9 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  background: linear-gradient(135deg, #1f3cff, #45c2ff);
-  color: #fff;
-  letter-spacing: -0.5px;
+  display: block;
+  object-fit: cover;
+  flex: 0 0 auto;
 }
 
 .brand__title {

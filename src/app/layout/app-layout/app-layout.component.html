@@ -2,69 +2,44 @@
   <header class="app-header">
     <div class="header__inner">
 
-      <a class="brand" routerLink="/home" aria-label="Rota Status">
-        <div class="brand__logo">RS</div>
+      <a class="brand" routerLink="/home" aria-label="RotaOne by FAN Tech">
+        <img class="brand__logo" src="assets/icons/icon-512x512.png" alt="RotaOne by FAN Tech" />
+
         <div class="brand__text">
-          <div class="brand__title">Rota Status</div>
+          <div class="brand__title">RotaOne</div>
           <div class="brand__subtitle">{{ roleLabel() }}</div>
         </div>
       </a>
 
-      <button
-        type="button"
-        class="mobile-toggle"
-        (click)="toggleMobileMenu()"
-        [attr.aria-expanded]="mobileMenuOpen"
-        aria-label="Abrir menu"
-      >
+      <button type="button" class="mobile-toggle" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen"
+        aria-label="Abrir menu">
         ☰
       </button>
 
       <nav class="nav" [class.nav--open]="mobileMenuOpen">
 
-        <div
-          class="nav-group"
-          *ngIf="isAdmin() || isOperador()"
-          [class.is-open]="openMenu === 'cadastros'"
-        >
-          <button
-            type="button"
-            class="nav-trigger"
-            (click)="toggleMenu('cadastros', $event)"
-          >
+        <div class="nav-group" *ngIf="isAdmin() || isOperador()" [class.is-open]="openMenu === 'cadastros'">
+          <button type="button" class="nav-trigger" (click)="toggleMenu('cadastros', $event)">
             Cadastros
             <span class="chevron">⌄</span>
           </button>
 
           <div class="dropdown">
-            <a
-              *ngIf="isAdmin()"
-              routerLink="/usuarios"
-              routerLinkActive="is-active"
-              (click)="closeMenus()"
-            >
+            <a *ngIf="isAdmin()" routerLink="/usuarios" routerLinkActive="is-active" (click)="closeMenus()">
               <span>
                 <strong>Usuários</strong>
                 <small>Gerenciar acessos e perfis</small>
               </span>
             </a>
 
-            <a
-              routerLink="/veiculos"
-              routerLinkActive="is-active"
-              (click)="closeMenus()"
-            >
+            <a routerLink="/veiculos" routerLinkActive="is-active" (click)="closeMenus()">
               <span>
                 <strong>Veículos</strong>
                 <small>Frota e dados dos veículos</small>
               </span>
             </a>
 
-            <a
-              routerLink="/manifestos/novo"
-              routerLinkActive="is-active"
-              (click)="closeMenus()"
-            >
+            <a routerLink="/manifestos/novo" routerLinkActive="is-active" (click)="closeMenus()">
               <span>
                 <strong>Novo Manifesto</strong>
                 <small>Cadastrar manifesto e entregas</small>
@@ -73,27 +48,15 @@
           </div>
         </div>
 
-        <div
-          class="nav-group"
-          *ngIf="isAdmin() || isOperador()"
-          [class.is-open]="openMenu === 'monitoramento'"
-        >
-          <button
-            type="button"
-            class="nav-trigger"
-            (click)="toggleMenu('monitoramento', $event)"
-          >
+        <div class="nav-group" *ngIf="isAdmin() || isOperador()" [class.is-open]="openMenu === 'monitoramento'">
+          <button type="button" class="nav-trigger" (click)="toggleMenu('monitoramento', $event)">
             Monitoramento
             <span class="chevron">⌄</span>
           </button>
 
           <div class="dropdown">
-            <a
-              routerLink="/manifestos"
-              routerLinkActive="is-active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="closeMenus()"
-            >
+            <a routerLink="/manifestos" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }"
+              (click)="closeMenus()">
               <span>
                 <strong>Buscar Manifesto</strong>
                 <small>Consultar manifestos e entregas</small>
@@ -116,26 +79,14 @@
           </div>
         </div>
 
-        <div
-          class="nav-group"
-          *ngIf="isMotorista()"
-          [class.is-open]="openMenu === 'rota'"
-        >
-          <button
-            type="button"
-            class="nav-trigger"
-            (click)="toggleMenu('rota', $event)"
-          >
+        <div class="nav-group" *ngIf="isMotorista()" [class.is-open]="openMenu === 'rota'">
+          <button type="button" class="nav-trigger" (click)="toggleMenu('rota', $event)">
             Minha Rota
             <span class="chevron">⌄</span>
           </button>
 
           <div class="dropdown">
-            <a
-              routerLink="/minha-rota"
-              routerLinkActive="is-active"
-              (click)="closeMenus()"
-            >
+            <a routerLink="/minha-rota" routerLinkActive="is-active" (click)="closeMenus()">
               <span>
                 <strong>Meus Manifestos</strong>
                 <small>Acompanhe suas rotas e entregas</small>
@@ -152,17 +103,10 @@
         </div>
       </nav>
 
-      <div
-        class="account"
-        [class.is-open]="openMenu === 'conta'"
-      >
+      <div class="account" [class.is-open]="openMenu === 'conta'">
         <span class="pill pill--ok">Backend online</span>
 
-        <button
-          type="button"
-          class="account-trigger"
-          (click)="toggleMenu('conta', $event)"
-        >
+        <button type="button" class="account-trigger" (click)="toggleMenu('conta', $event)">
           <span class="avatar">{{ userInitial() }}</span>
 
           <span class="account__text">
@@ -179,11 +123,7 @@
             <small>{{ topbarHint() }}</small>
           </div>
 
-          <button
-            type="button"
-            class="logout-btn"
-            (click)="logout()"
-          >
+          <button type="button" class="logout-btn" (click)="logout()">
             Sair
           </button>
         </div>

@@ -3,23 +3,17 @@
 
   <div class="card">
     <div class="brand">
-      <div class="logo">RS</div>
+      <img class="logo" src="assets/icons/icon-512x512.png" alt="RotaOne by FAN Tech" />
       <div class="titles">
-        <h1>Rota Status</h1>
-        <p>Entre para acompanhar manifestos e entregas</p>
+        <h1>RotaOne</h1>
+        <p>Gestão inteligente de rotas e entregas</p>
       </div>
     </div>
-
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
       <div class="field">
         <label>CPF</label>
-        <input
-          type="text"
-          inputmode="numeric"
-          placeholder="000.000.000-00"
-          formControlName="cpf"
-          autocomplete="username"
-        />
+        <input type="text" inputmode="numeric" placeholder="000.000.000-00" formControlName="cpf"
+          autocomplete="username" />
         <small *ngIf="form.get('cpf')?.touched && form.get('cpf')?.invalid">
           Informe um CPF válido.
         </small>
@@ -27,12 +21,7 @@
 
       <div class="field">
         <label>Senha</label>
-        <input
-          type="password"
-          placeholder="Sua senha"
-          formControlName="senha"
-          autocomplete="current-password"
-        />
+        <input type="password" placeholder="Sua senha" formControlName="senha" autocomplete="current-password" />
         <small *ngIf="form.get('senha')?.touched && form.get('senha')?.invalid">
           Informe sua senha.
         </small>
@@ -56,6 +45,6 @@
   </div>
 
   <footer class="foot">
-    <span>FAN Tech • Rota Status</span>
+    <span>RotaOne by FAN Tech</span>
   </footer>
 </div>
