@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/auth/auth.service';
 import {
   ActivatedRoute,
   Router,
@@ -63,6 +64,7 @@ export class EntregaDetalheComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly entregasService = inject(EntregasService);
+  private readonly authService = inject(AuthService);
 
 
   numeroManifesto =
@@ -348,6 +350,14 @@ export class EntregaDetalheComponent {
 
 
   voltar(): void {
+    if (this.authService.hasAnyRole(['MOTORISTA'])) {
+      this.router.navigate([
+        '/minha-rota',
+        this.numeroManifesto
+      ]);
+      return;
+    }
+
     this.router.navigate(['/manifestos'], {
       queryParams: {
         numero: this.numeroManifesto
