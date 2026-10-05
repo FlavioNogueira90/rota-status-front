@@ -104,27 +104,27 @@ export class EntregaDetalheComponent {
     valor: TipoEntregaAnexo;
     label: string;
   }[] = [
-    {
-      valor: 'CANHOTO',
-      label: 'Canhoto / comprovante de entrega'
-    },
-    {
-      valor: 'FOTO_MERCADORIA',
-      label: 'Foto da mercadoria'
-    },
-    {
-      valor: 'FOTO_AVARIA',
-      label: 'Foto de avaria'
-    },
-    {
-      valor: 'FOTO_DEVOLUCAO',
-      label: 'Foto de devolução'
-    },
-    {
-      valor: 'OUTRO',
-      label: 'Outro'
-    }
-  ];
+      {
+        valor: 'CANHOTO',
+        label: 'Canhoto / comprovante de entrega'
+      },
+      {
+        valor: 'FOTO_MERCADORIA',
+        label: 'Foto da mercadoria'
+      },
+      {
+        valor: 'FOTO_AVARIA',
+        label: 'Foto de avaria'
+      },
+      {
+        valor: 'FOTO_DEVOLUCAO',
+        label: 'Foto de devolução'
+      },
+      {
+        valor: 'OUTRO',
+        label: 'Outro'
+      }
+    ];
 
 
   /* =====================================================
@@ -145,78 +145,78 @@ export class EntregaDetalheComponent {
     valor: MotivoDevolucao;
     label: string;
   }[] = [
-    {
-      valor: 'RECUSA_CLIENTE',
-      label: 'Recusa do cliente'
-    },
-    {
-      valor: 'FALTA',
-      label: 'Falta'
-    },
-    {
-      valor: 'AVARIA',
-      label: 'Avaria'
-    },
-    {
-      valor: 'DIVERGENCIA',
-      label: 'Divergência'
-    },
-    {
-      valor: 'PRODUTO_INCORRETO',
-      label: 'Produto incorreto'
-    },
-    {
-      valor: 'OUTRO',
-      label: 'Outro'
-    }
-  ];
+      {
+        valor: 'RECUSA_CLIENTE',
+        label: 'Recusa do cliente'
+      },
+      {
+        valor: 'FALTA',
+        label: 'Falta'
+      },
+      {
+        valor: 'AVARIA',
+        label: 'Avaria'
+      },
+      {
+        valor: 'DIVERGENCIA',
+        label: 'Divergência'
+      },
+      {
+        valor: 'PRODUTO_INCORRETO',
+        label: 'Produto incorreto'
+      },
+      {
+        valor: 'OUTRO',
+        label: 'Outro'
+      }
+    ];
 
 
   readonly motivosNaoRealizacao: {
     valor: MotivoNaoRealizacao;
     label: string;
   }[] = [
-    {
-      valor: 'TEMPO_INSUFICIENTE',
-      label: 'Tempo insuficiente'
-    },
-    {
-      valor: 'CLIENTE_FECHADO',
-      label: 'Cliente fechado'
-    },
-    {
-      valor: 'CLIENTE_SEM_SISTEMA',
-      label: 'Cliente sem sistema'
-    },
-    {
-      valor: 'CLIENTE_AUSENTE',
-      label: 'Cliente ausente'
-    },
-    {
-      valor: 'CLIENTE_SEM_ESPACO',
-      label: 'Cliente sem espaço'
-    },
-    {
-      valor: 'ENDERECO_NAO_LOCALIZADO',
-      label: 'Endereço não localizado'
-    },
-    {
-      valor: 'VEICULO_COM_PROBLEMA',
-      label: 'Veículo com problema'
-    },
-    {
-      valor: 'PROBLEMA_NA_CARGA',
-      label: 'Problema na carga'
-    },
-    {
-      valor: 'ROTA_INTERROMPIDA',
-      label: 'Rota interrompida'
-    },
-    {
-      valor: 'OUTRO',
-      label: 'Outro'
-    }
-  ];
+      {
+        valor: 'TEMPO_INSUFICIENTE',
+        label: 'Tempo insuficiente'
+      },
+      {
+        valor: 'CLIENTE_FECHADO',
+        label: 'Cliente fechado'
+      },
+      {
+        valor: 'CLIENTE_SEM_SISTEMA',
+        label: 'Cliente sem sistema'
+      },
+      {
+        valor: 'CLIENTE_AUSENTE',
+        label: 'Cliente ausente'
+      },
+      {
+        valor: 'CLIENTE_SEM_ESPACO',
+        label: 'Cliente sem espaço'
+      },
+      {
+        valor: 'ENDERECO_NAO_LOCALIZADO',
+        label: 'Endereço não localizado'
+      },
+      {
+        valor: 'VEICULO_COM_PROBLEMA',
+        label: 'Veículo com problema'
+      },
+      {
+        valor: 'PROBLEMA_NA_CARGA',
+        label: 'Problema na carga'
+      },
+      {
+        valor: 'ROTA_INTERROMPIDA',
+        label: 'Rota interrompida'
+      },
+      {
+        valor: 'OUTRO',
+        label: 'Outro'
+      }
+    ];
 
 
   /* =====================================================
@@ -241,51 +241,51 @@ export class EntregaDetalheComponent {
     valor: MotivoOcorrenciaEntrega;
     label: string;
   }[] = [
-    {
-      valor: 'CLIENTE_SEM_SISTEMA',
-      label: 'Cliente sem sistema'
-    },
-    {
-      valor: 'CLIENTE_FECHADO',
-      label: 'Cliente fechado'
-    },
-    {
-      valor: 'CLIENTE_AUSENTE',
-      label: 'Cliente ausente'
-    },
-    {
-      valor: 'CLIENTE_SEM_ESPACO',
-      label: 'Cliente sem espaço'
-    },
-    {
-      valor: 'FILA_OU_ESPERA',
-      label: 'Fila ou espera'
-    },
-    {
-      valor: 'ACESSO_BLOQUEADO',
-      label: 'Acesso bloqueado'
-    },
-    {
-      valor: 'ENDERECO_NAO_LOCALIZADO',
-      label: 'Endereço não localizado'
-    },
-    {
-      valor: 'PROBLEMA_NO_VEICULO',
-      label: 'Problema no veículo'
-    },
-    {
-      valor: 'PROBLEMA_NA_CARGA',
-      label: 'Problema na carga'
-    },
-    {
-      valor: 'DIVERGENCIA_DOCUMENTAL',
-      label: 'Divergência documental'
-    },
-    {
-      valor: 'OUTRO',
-      label: 'Outro'
-    }
-  ];
+      {
+        valor: 'CLIENTE_SEM_SISTEMA',
+        label: 'Cliente sem sistema'
+      },
+      {
+        valor: 'CLIENTE_FECHADO',
+        label: 'Cliente fechado'
+      },
+      {
+        valor: 'CLIENTE_AUSENTE',
+        label: 'Cliente ausente'
+      },
+      {
+        valor: 'CLIENTE_SEM_ESPACO',
+        label: 'Cliente sem espaço'
+      },
+      {
+        valor: 'FILA_OU_ESPERA',
+        label: 'Fila ou espera'
+      },
+      {
+        valor: 'ACESSO_BLOQUEADO',
+        label: 'Acesso bloqueado'
+      },
+      {
+        valor: 'ENDERECO_NAO_LOCALIZADO',
+        label: 'Endereço não localizado'
+      },
+      {
+        valor: 'PROBLEMA_NO_VEICULO',
+        label: 'Problema no veículo'
+      },
+      {
+        valor: 'PROBLEMA_NA_CARGA',
+        label: 'Problema na carga'
+      },
+      {
+        valor: 'DIVERGENCIA_DOCUMENTAL',
+        label: 'Divergência documental'
+      },
+      {
+        valor: 'OUTRO',
+        label: 'Outro'
+      }
+    ];
 
 
   /* =====================================================
@@ -348,11 +348,11 @@ export class EntregaDetalheComponent {
 
 
   voltar(): void {
-
-    this.router.navigate([
-      '/minha-rota',
-      this.numeroManifesto
-    ]);
+    this.router.navigate(['/manifestos'], {
+      queryParams: {
+        numero: this.numeroManifesto
+      }
+    });
   }
 
 

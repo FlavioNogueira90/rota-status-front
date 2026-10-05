@@ -70,7 +70,8 @@ export class NovoManifestoComponent {
       {
         numero: 1,
         clienteNome: '',
-        endereco: ''
+        endereco: '',
+        notasFiscais: []
       }
     ]
   };
@@ -207,15 +208,16 @@ export class NovoManifestoComponent {
       (
         this.form.entregas?.length
           ? Math.max(
-              ...this.form.entregas.map(e => e.numero)
-            )
+            ...this.form.entregas.map(e => e.numero)
+          )
           : 0
       ) + 1;
 
     this.form.entregas.push({
       numero: proximoNumero,
       clienteNome: '',
-      endereco: ''
+      endereco: '',
+      notasFiscais: []
     });
   }
 
@@ -226,6 +228,22 @@ export class NovoManifestoComponent {
     }
 
     this.form.entregas.splice(i, 1);
+  }
+
+  adicionarNotaFiscal(entregaIndex: number) {
+    this.form.entregas[entregaIndex].notasFiscais.push({
+      numero: '',
+      serie: '',
+      chaveAcesso: ''
+    });
+  }
+
+  removerNotaFiscal(
+    entregaIndex: number,
+    notaIndex: number
+  ) {
+    this.form.entregas[entregaIndex]
+      .notasFiscais.splice(notaIndex, 1);
   }
 
   /* =========================
@@ -266,6 +284,18 @@ export class NovoManifestoComponent {
 
       if (!e.endereco.trim()) {
         return `Entrega ${e.numero}: informe o endereço.`;
+      }
+
+      if (!e.notasFiscais?.length) {
+        return `Entrega ${e.numero}: adicione pelo menos uma nota fiscal.`;
+      }
+
+      for (const nf of e.notasFiscais) {
+
+        if (!nf.numero?.trim()) {
+          return `Entrega ${e.numero}: informe o número de todas as notas fiscais.`;
+        }
+
       }
     }
 

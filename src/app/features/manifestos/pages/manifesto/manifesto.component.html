@@ -79,7 +79,7 @@
   <section *ngIf="entregas$ | async as entregas" class="card grid">
     <div class="grid__header">
       <h3>Entregas</h3>
-      <span class="hint">Duplo clique em uma entrega para ver detalhes</span>
+      <span class="hint">Selecione uma entrega para ver os detalhes</span>
     </div>
 
     <table class="table">
@@ -89,16 +89,22 @@
           <th>Cliente</th>
           <th>Endereço</th>
           <th class="col-status">Status</th>
+          <th class="col-action">Ação</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr *ngFor="let e of entregas" (dblclick)="abrirDetalhe(e)" class="row" title="Duplo clique para ver detalhes">
+        <tr *ngFor="let e of entregas" class="row">
           <td class="mono">{{ e.numero }}</td>
           <td class="strong">{{ e.clienteNome }}</td>
           <td class="muted">{{ e.endereco }}</td>
           <td>
             <span class="pill" [ngClass]="pillClass(e.status)">{{ e.status }}</span>
+          </td>
+          <td class="action-cell">
+            <button type="button" class="btn-detail" (click)="abrirDetalhe(e)">
+              Ver detalhes
+            </button>
           </td>
         </tr>
       </tbody>

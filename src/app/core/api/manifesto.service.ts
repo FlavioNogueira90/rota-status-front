@@ -5,10 +5,17 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Manifesto } from '../../shared/models/manifesto.model';
 
+export interface NovaNotaFiscalRequest {
+  numero: string;
+  serie?: string;
+  chaveAcesso?: string;
+}
+
 export interface NovaEntregaRequest {
   numero: number;
   clienteNome: string;
   endereco: string;
+  notasFiscais: NovaNotaFiscalRequest[];
 }
 
 export interface NovoManifestoRequest {

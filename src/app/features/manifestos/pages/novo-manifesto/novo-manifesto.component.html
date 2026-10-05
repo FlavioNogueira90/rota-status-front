@@ -12,17 +12,20 @@
 
     <div class="actions">
 
-      <button
-        class="btn"
-        type="button"
-        (click)="salvar()"
-        [disabled]="salvando"
-      >
+      <button class="btn" type="button" (click)="salvar()" [disabled]="salvando">
         {{ salvando ? 'Salvando...' : 'Salvar manifesto' }}
       </button>
 
     </div>
 
+  </div>
+
+  <div *ngIf="erro" class="error" role="alert">
+    {{ erro }}
+  </div>
+
+  <div *ngIf="sucesso" class="success">
+    {{ sucesso }}
   </div>
 
   <!-- =========================
@@ -41,12 +44,7 @@
           Número do Manifesto
         </label>
 
-        <input
-          class="input"
-          type="number"
-          [(ngModel)]="form.numeroManifesto"
-          placeholder="Ex: 10001"
-        />
+        <input class="input" type="number" [(ngModel)]="form.numeroManifesto" placeholder="Ex: 10001" />
 
       </div>
 
@@ -60,50 +58,29 @@
 
         <div class="searchInput">
 
-          <input
-            class="input"
-            type="text"
-            [(ngModel)]="termoMotorista"
-            (input)="buscarMotoristas()"
-            placeholder="Digite nome ou CPF"
-            autocomplete="off"
-          />
+          <input class="input" type="text" [(ngModel)]="termoMotorista" (input)="buscarMotoristas()"
+            placeholder="Digite nome ou CPF" autocomplete="off" />
 
-          <button
-            *ngIf="motoristaSelecionado"
-            type="button"
-            class="clearBtn"
-            (click)="limparMotorista()"
-            title="Limpar motorista"
-          >
+          <button *ngIf="motoristaSelecionado" type="button" class="clearBtn" (click)="limparMotorista()"
+            title="Limpar motorista">
             ✕
           </button>
 
         </div>
 
-        <div
-          *ngIf="buscandoMotoristas"
-          class="searchHint"
-        >
+        <div *ngIf="buscandoMotoristas" class="searchHint">
           Buscando motoristas...
         </div>
 
         <!-- Resultados -->
 
-        <div
-          class="autocompleteMenu"
-          *ngIf="
+        <div class="autocompleteMenu" *ngIf="
             motoristasEncontrados.length > 0 &&
             !motoristaSelecionado
-          "
-        >
+          ">
 
-          <button
-            type="button"
-            class="autocompleteItem"
-            *ngFor="let motorista of motoristasEncontrados"
-            (click)="selecionarMotorista(motorista)"
-          >
+          <button type="button" class="autocompleteItem" *ngFor="let motorista of motoristasEncontrados"
+            (click)="selecionarMotorista(motorista)">
 
             <div class="optionMain">
               {{ motorista.nome }}
@@ -119,91 +96,64 @@
 
         <!-- Selecionado -->
 
-        <div
-            class="selectedInfo"
-            *ngIf="motoristaSelecionado"
-         >
-            CPF: {{ motoristaSelecionado.cpfMascarado }}
+        <div class="selectedInfo" *ngIf="motoristaSelecionado">
+          CPF: {{ motoristaSelecionado.cpfMascarado }}
         </div>
 
       </div>
 
-  <!-- Veículo -->
+      <!-- Veículo -->
 
-  <div class="field autocomplete">
+      <div class="field autocomplete">
 
-    <label class="label">
-      Veículo
-    </label>
+        <label class="label">
+          Veículo
+        </label>
 
-    <div class="searchInput">
+        <div class="searchInput">
 
-      <input
-        class="input"
-        type="text"
-        [(ngModel)]="termoVeiculo"
-        (input)="buscarVeiculos()"
-        placeholder="Digite a placa"
-        autocomplete="off"
-      />
+          <input class="input" type="text" [(ngModel)]="termoVeiculo" (input)="buscarVeiculos()"
+            placeholder="Digite a placa" autocomplete="off" />
 
-      <button
-        *ngIf="veiculoSelecionado"
-        type="button"
-        class="clearBtn"
-        (click)="limparVeiculo()"
-        title="Limpar veículo"
-      >
-        ✕
-      </button>
+          <button *ngIf="veiculoSelecionado" type="button" class="clearBtn" (click)="limparVeiculo()"
+            title="Limpar veículo">
+            ✕
+          </button>
 
-    </div>
+        </div>
 
-    <div
-      *ngIf="buscandoVeiculos"
-      class="searchHint"
-    >
-      Buscando veículos...
-    </div>
+        <div *ngIf="buscandoVeiculos" class="searchHint">
+          Buscando veículos...
+        </div>
 
-    <!-- Resultados -->
+        <!-- Resultados -->
 
-    <div
-      class="autocompleteMenu"
-      *ngIf="
+        <div class="autocompleteMenu" *ngIf="
         veiculosEncontrados.length > 0 &&
         !veiculoSelecionado
-      "
-    >
+      ">
 
-      <button
-        type="button"
-        class="autocompleteItem"
-        *ngFor="let veiculo of veiculosEncontrados"
-        (click)="selecionarVeiculo(veiculo)"
-      >
+          <button type="button" class="autocompleteItem" *ngFor="let veiculo of veiculosEncontrados"
+            (click)="selecionarVeiculo(veiculo)">
 
-        <div class="optionMain">
-          {{ veiculo.placa }}
+            <div class="optionMain">
+              {{ veiculo.placa }}
+            </div>
+
+            <div class="optionSub">
+              {{ veiculo.marca }} • {{ veiculo.modelo }}
+            </div>
+
+          </button>
+
         </div>
 
-        <div class="optionSub">
-          {{ veiculo.marca }} • {{ veiculo.modelo }}
+        <!-- Selecionado -->
+
+        <div class="selectedInfo" *ngIf="veiculoSelecionado">
+          {{ veiculoSelecionado.marca }} • {{ veiculoSelecionado.modelo }}
         </div>
-
-      </button>
-
-    </div>
-
-    <!-- Selecionado -->
-
-    <div
-      class="selectedInfo"
-      *ngIf="veiculoSelecionado"
-    >
-      {{ veiculoSelecionado.marca }} • {{ veiculoSelecionado.modelo }}
-    </div>
-  </div>
+      </div>
 
     </div>
 
@@ -224,11 +174,7 @@
         </p>
       </div>
 
-      <button
-        class="btn btn--ghost"
-        type="button"
-        (click)="adicionarEntrega()"
-      >
+      <button class="btn btn--ghost" type="button" (click)="adicionarEntrega()">
         + Adicionar entrega
       </button>
 
@@ -256,63 +202,116 @@
 
         <tbody>
 
-          <tr
-            *ngFor="
-              let e of form.entregas;
-              let i = index
-            "
-          >
+          <ng-container *ngFor="
+      let e of form.entregas;
+      let i = index
+    ">
 
-            <td data-label="Nº">
+            <!-- DADOS DA ENTREGA -->
+            <tr>
 
-              <input
-                class="input input--numero"
-                type="number"
-                [(ngModel)]="e.numero"
-                min="1"
-              />
+              <td data-label="Nº">
 
-            </td>
+                <input class="input input--numero" type="number" [(ngModel)]="e.numero" min="1" />
 
-            <td data-label="Cliente">
+              </td>
 
-              <input
-                class="input"
-                [(ngModel)]="e.clienteNome"
-                placeholder="Nome do cliente"
-              />
+              <td data-label="Cliente">
 
-            </td>
+                <input class="input" [(ngModel)]="e.clienteNome" placeholder="Nome do cliente" />
 
-            <td data-label="Endereço">
+              </td>
 
-              <input
-                class="input"
-                [(ngModel)]="e.endereco"
-                placeholder="Endereço completo"
-              />
+              <td data-label="Endereço">
 
-            </td>
+                <input class="input" [(ngModel)]="e.endereco" placeholder="Endereço completo" />
 
-            <td class="actionsCell" data-label="">
+              </td>
 
-              <button
-                class="iconBtn"
-                type="button"
-                (click)="removerEntrega(i)"
-                [disabled]="form.entregas.length <= 1"
-                title="Remover entrega"
-                aria-label="Remover entrega"
-              >
-                ✕
-              </button>
+              <td class="actionsCell" data-label="">
 
-            </td>
+                <button class="iconBtn" type="button" (click)="removerEntrega(i)" [disabled]="form.entregas.length <= 1"
+                  title="Remover entrega" aria-label="Remover entrega">
+                  ✕
+                </button>
 
-          </tr>
+              </td>
+
+            </tr>
+
+            <!-- NOTAS FISCAIS DA ENTREGA -->
+            <tr class="notasRow">
+
+              <td colspan="4">
+
+                <div class="notasBox">
+
+                  <div class="notasHeader">
+
+                    <div>
+                      <strong>
+                        Notas fiscais — Entrega {{ e.numero }}
+                      </strong>
+
+                      <div class="notasHint">
+                        Informe as NFs vinculadas a esta entrega.
+                      </div>
+                    </div>
+
+                    <button class="btn btn--ghost" type="button" (click)="adicionarNotaFiscal(i)">
+                      + Adicionar NF
+                    </button>
+
+                  </div>
+
+                  <div class="notaVazia" *ngIf="e.notasFiscais.length === 0">
+                    Nenhuma nota fiscal adicionada.
+                  </div>
+
+                  <div class="notaFiscal" *ngFor="
+              let nf of e.notasFiscais;
+              let j = index
+            ">
+
+                    <div class="field">
+
+                      <label class="label">
+                        Número da NF
+                      </label>
+
+                      <input class="input" type="text" [(ngModel)]="nf.numero" placeholder="Ex: 123456" />
+
+                    </div>
+
+                    <div class="field">
+
+                      <label class="label">
+                        Série
+                      </label>
+
+                      <input class="input" type="text" [(ngModel)]="nf.serie" placeholder="Ex: 1" />
+
+                    </div>
+                    <div class="notaActions">
+
+                      <button class="iconBtn" type="button" (click)="removerNotaFiscal(i, j)"
+                        title="Remover nota fiscal" aria-label="Remover nota fiscal">
+                        ✕
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          </ng-container>
 
         </tbody>
-
       </table>
 
     </div>

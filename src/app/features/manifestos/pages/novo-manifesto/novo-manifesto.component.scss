@@ -37,22 +37,20 @@
   border: 1px solid #eaecf0;
   border-radius: 14px;
   padding: 16px;
-  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
   margin-top: 16px;
 }
 
 .grid {
   display: grid;
   grid-template-columns:
-    minmax(160px, 0.75fr)
-    minmax(220px, 1fr)
-    minmax(220px, 1fr);
+    minmax(160px, 0.75fr) minmax(220px, 1fr) minmax(220px, 1fr);
   gap: 16px;
   align-items: start;
   width: 100%;
 }
 
-.grid > * {
+.grid>* {
   min-width: 0;
 }
 
@@ -140,7 +138,8 @@
   border-collapse: collapse;
   margin-top: 10px;
 
-  th, td {
+  th,
+  td {
     text-align: left;
     padding: 10px;
     border-bottom: 1px solid #eef2f6;
@@ -155,8 +154,13 @@
   }
 }
 
-.colNum { width: 90px; }
-.colActions { width: 60px; }
+.colNum {
+  width: 90px;
+}
+
+.colActions {
+  width: 60px;
+}
 
 .actionsCell {
   text-align: right;
@@ -415,7 +419,22 @@
 }
 
 /* Mobile/tablet: cada entrega vira um bloco vertical */
+/* Mobile/tablet */
 @media (max-width: 760px) {
+
+  .page {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .card,
+  .entregasCard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   .entregasCard .tableHeader {
     align-items: flex-start;
     flex-direction: column;
@@ -426,11 +445,15 @@
   }
 
   .entregasTableWrapper {
+    width: 100%;
+    max-width: 100%;
     overflow: visible;
   }
 
   .entregasTable {
+    width: 100%;
     min-width: 0;
+    table-layout: auto;
   }
 
   .entregasTable thead {
@@ -443,22 +466,25 @@
   .entregasTable td {
     display: block;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
-  .entregasTable tr {
-    margin-bottom: 14px;
+  /* Linha principal da entrega */
+  .entregasTable tr:not(.notasRow) {
+    margin: 0;
     padding: 12px;
     border: 1px solid #eaecf0;
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
     background: #fff;
   }
 
-  .entregasTable td {
+  .entregasTable tr:not(.notasRow) td {
     padding: 0 0 10px;
     border: 0;
   }
 
-  .entregasTable td:last-child {
+  .entregasTable tr:not(.notasRow) td:last-child {
     padding-bottom: 0;
   }
 
@@ -479,13 +505,68 @@
   .entregasTable .actionsCell::before {
     display: none;
   }
+
+  /* Área das NFs pertence à mesma entrega */
+  .entregasTable .notasRow {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 1px solid #eaecf0;
+    border-top: 0;
+    border-radius: 0 0 12px 12px;
+    background: #f9fafb;
+  }
+
+  .entregasTable .notasRow>td {
+    padding: 12px;
+    border: 0;
+  }
+
+  .entregasTable .notasRow>td::before {
+    display: none;
+  }
+
+  .notasBox,
+  .notaFiscal,
+  .field,
+  .input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .notasHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .notasHeader .btn {
+    width: 100%;
+  }
+
+  .notaFiscal {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eaecf0;
+  }
+
+  .notaActions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 /* =========================
    ALINHAMENTO DOS CARDS
    ========================= */
 
-.page > .card {
+.page>.card {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
