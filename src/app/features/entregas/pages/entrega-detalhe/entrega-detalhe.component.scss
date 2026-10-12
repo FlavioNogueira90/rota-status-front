@@ -168,7 +168,7 @@
   font-size: 17px;
 }
 
-.ocorrencia-status__conteudo > p {
+.ocorrencia-status__conteudo>p {
   margin: 6px 0 0;
   color: #7a2e0e;
   line-height: 1.5;
@@ -596,6 +596,7 @@
     width: 100%;
   }
 }
+
 /* =========================
    EVIDÊNCIAS / ANEXOS
    ========================= */
@@ -804,4 +805,15 @@
   .evidencia-item .btn {
     width: 100%;
   }
+}
+
+/* =====================================
+   MODAL DE VISUALIZAÇÃO DE EVIDÊNCIAS
+   ===================================== */
+
+.evidencia-item__acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }

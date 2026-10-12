@@ -153,7 +153,7 @@ export class ChecklistPreRotaComponent {
   }
 
   concluir(): void {
-    if (this.concluindo) {
+    if (this.concluindo || this.salvando || this.liberando) {
       return;
     }
 
@@ -161,27 +161,51 @@ export class ChecklistPreRotaComponent {
     this.erro = '';
     this.sucesso = '';
 
+    // 1. Salva os dados atuais do formulário
     this.checklistService
-      .concluir(this.numeroManifesto)
+      .salvar(this.numeroManifesto, this.form)
       .subscribe({
-        next: (checklist) => {
-          this.checklist = checklist;
-          this.concluindo = false;
+        next: (checklistSalvo) => {
+          this.checklist = checklistSalvo;
 
-          this.sucesso =
-            'Checklist concluído com sucesso.';
+          // 2. Somente após salvar, conclui o checklist
+          this.checklistService
+            .concluir(this.numeroManifesto)
+            .subscribe({
+              next: (checklistConcluido) => {
+                this.checklist = checklistConcluido;
+                this.concluindo = false;
+
+                this.sucesso =
+                  'Checklist salvo e concluído com sucesso.';
+              },
+
+              error: (erro) => {
+                console.error(
+                  'Erro ao concluir checklist:',
+                  erro
+                );
+
+                this.erro =
+                  erro.error?.message ||
+                  erro.error?.mensagem ||
+                  'Checklist salvo, mas não foi possível concluir.';
+
+                this.concluindo = false;
+              }
+            });
         },
 
         error: (erro) => {
           console.error(
-            'Erro ao concluir checklist:',
+            'Erro ao salvar checklist antes da conclusão:',
             erro
           );
 
           this.erro =
             erro.error?.message ||
             erro.error?.mensagem ||
-            'Não foi possível concluir o checklist.';
+            'Não foi possível salvar o checklist. A conclusão não foi realizada.';
 
           this.concluindo = false;
         }

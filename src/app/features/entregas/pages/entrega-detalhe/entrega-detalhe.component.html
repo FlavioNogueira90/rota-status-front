@@ -2,9 +2,7 @@
 
   <div class="top">
 
-    <button
-      class="btn"
-      (click)="voltar()">
+    <button class="btn" (click)="voltar()">
       ← Voltar
     </button>
 
@@ -23,9 +21,7 @@
   </div>
 
 
-  <section
-    class="card"
-    *ngIf="entrega$ | async as e; else notFound">
+  <section class="card" *ngIf="entrega$ | async as e; else notFound">
 
 
     <!-- CABEÇALHO -->
@@ -44,9 +40,7 @@
 
       </div>
 
-      <span
-        class="pill"
-        [ngClass]="pillClass(e.status)">
+      <span class="pill" [ngClass]="pillClass(e.status)">
         {{ e.status }}
       </span>
 
@@ -102,9 +96,7 @@
          ENTREGA INTERROMPIDA
          =================================================== -->
 
-    <section
-      *ngIf="e.status === 'INTERROMPIDA'"
-      class="ocorrencia-status">
+    <section *ngIf="e.status === 'INTERROMPIDA'" class="ocorrencia-status">
 
       <div class="ocorrencia-status__icone">
         ⚠
@@ -122,9 +114,7 @@
           poderão ser processadas em uma nova tentativa.
         </p>
 
-        <div
-          *ngIf="e.justificativaStatus"
-          class="ocorrencia-status__motivo">
+        <div *ngIf="e.justificativaStatus" class="ocorrencia-status__motivo">
 
           <strong>
             Ocorrência:
@@ -135,23 +125,16 @@
         </div>
 
 
-        <div
-          *ngIf="sucessoOcorrencia"
-          class="feedback feedback--sucesso">
+        <div *ngIf="sucessoOcorrencia" class="feedback feedback--sucesso">
           {{ sucessoOcorrencia }}
         </div>
 
 
         <!-- FINALIZAR SEM NOVA TENTATIVA -->
 
-        <div
-          *ngIf="!formularioFinalizacaoAberto"
-          class="ocorrencia-status__acoes">
+        <div *ngIf="!formularioFinalizacaoAberto" class="ocorrencia-status__acoes">
 
-          <button
-            type="button"
-            class="btn btn--danger-outline"
-            (click)="abrirFormularioFinalizacao()">
+          <button type="button" class="btn btn--danger-outline" (click)="abrirFormularioFinalizacao()">
             Encerrar sem nova tentativa
           </button>
 
@@ -163,9 +146,7 @@
         </div>
 
 
-        <div
-          *ngIf="formularioFinalizacaoAberto"
-          class="finalizacao-form">
+        <div *ngIf="formularioFinalizacaoAberto" class="finalizacao-form">
 
           <div class="alerta-finalizacao">
 
@@ -188,17 +169,13 @@
               Motivo da não realização
             </label>
 
-            <select
-              id="motivo-finalizacao"
-              [(ngModel)]="motivoFinalizacao">
+            <select id="motivo-finalizacao" [(ngModel)]="motivoFinalizacao">
 
               <option [ngValue]="null">
                 Selecione o motivo
               </option>
 
-              <option
-                *ngFor="let motivo of motivosNaoRealizacao"
-                [ngValue]="motivo.valor">
+              <option *ngFor="let motivo of motivosNaoRealizacao" [ngValue]="motivo.valor">
                 {{ motivo.label }}
               </option>
 
@@ -213,46 +190,33 @@
               Justificativa
             </label>
 
-            <textarea
-              id="justificativa-finalizacao"
-              [(ngModel)]="justificativaFinalizacao"
-              rows="3"
+            <textarea id="justificativa-finalizacao" [(ngModel)]="justificativaFinalizacao" rows="3"
               placeholder="Informe detalhes adicionais, se necessário">
             </textarea>
 
           </div>
 
 
-          <div
-            *ngIf="erroFinalizacao"
-            class="feedback feedback--erro">
+          <div *ngIf="erroFinalizacao" class="feedback feedback--erro">
             {{ erroFinalizacao }}
           </div>
 
 
           <div class="resultado__acoes">
 
-            <button
-              type="button"
-              class="btn"
-              [disabled]="finalizandoSemNovaTentativa"
-              (click)="cancelarFinalizacao()">
+            <button type="button" class="btn" [disabled]="finalizandoSemNovaTentativa" (click)="cancelarFinalizacao()">
               Cancelar
             </button>
 
-            <button
-              type="button"
-              class="btn btn--danger"
-              [disabled]="
+            <button type="button" class="btn btn--danger" [disabled]="
                 !motivoFinalizacao ||
                 finalizandoSemNovaTentativa
-              "
-              (click)="finalizarSemNovaTentativa()">
+              " (click)="finalizarSemNovaTentativa()">
 
               {{
-                finalizandoSemNovaTentativa
-                  ? 'Encerrando...'
-                  : 'Confirmar encerramento'
+              finalizandoSemNovaTentativa
+              ? 'Encerrando...'
+              : 'Confirmar encerramento'
               }}
 
             </button>
@@ -280,15 +244,11 @@
             Notas Fiscais
           </h3>
 
-          <p
-            *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'"
-            class="notas-fiscais__instrucao">
+          <p *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'" class="notas-fiscais__instrucao">
             Informe o resultado de cada nota fiscal recebida pelo cliente.
           </p>
 
-          <p
-            *ngIf="e.status === 'INTERROMPIDA'"
-            class="notas-fiscais__instrucao">
+          <p *ngIf="e.status === 'INTERROMPIDA'" class="notas-fiscais__instrucao">
             As notas fiscais pendentes estão preservadas enquanto
             a entrega estiver interrompida.
           </p>
@@ -298,46 +258,33 @@
       </div>
 
 
-      <div
-        *ngIf="sucessoResultado"
-        class="feedback feedback--sucesso">
+      <div *ngIf="sucessoResultado" class="feedback feedback--sucesso">
         {{ sucessoResultado }}
       </div>
 
 
-      <div
-        *ngIf="erroResultado"
-        class="feedback feedback--erro">
+      <div *ngIf="erroResultado" class="feedback feedback--erro">
         {{ erroResultado }}
       </div>
 
 
-      <div
-        *ngIf="sucessoAnexo"
-        class="feedback feedback--sucesso">
+      <div *ngIf="sucessoAnexo" class="feedback feedback--sucesso">
         {{ sucessoAnexo }}
       </div>
 
 
-      <div
-        *ngIf="erroAnexo && !formularioAnexoNotaId"
-        class="feedback feedback--erro">
+      <div *ngIf="erroAnexo && !formularioAnexoNotaId" class="feedback feedback--erro">
         {{ erroAnexo }}
       </div>
 
 
-      <ng-container
-        *ngIf="notasFiscais$ | async as notas">
+      <ng-container *ngIf="notasFiscais$ | async as notas">
 
 
-        <div
-          *ngIf="notas.length > 0; else semNotas"
-          class="notas-fiscais__lista">
+        <div *ngIf="notas.length > 0; else semNotas" class="notas-fiscais__lista">
 
 
-          <article
-            *ngFor="let nota of notas"
-            class="nota-fiscal">
+          <article *ngFor="let nota of notas" class="nota-fiscal">
 
 
             <div class="nota-fiscal__cabecalho">
@@ -348,27 +295,21 @@
                   NF {{ nota.numero }}
                 </strong>
 
-                <span
-                  *ngIf="nota.serie"
-                  class="muted">
+                <span *ngIf="nota.serie" class="muted">
                   • Série {{ nota.serie }}
                 </span>
 
               </div>
 
 
-              <span
-                class="pill"
-                [ngClass]="pillNotaClass(nota.status)">
+              <span class="pill" [ngClass]="pillNotaClass(nota.status)">
                 {{ statusNotaLabel(nota.status) }}
               </span>
 
             </div>
 
 
-            <div
-              *ngIf="nota.justificativa"
-              class="nota-fiscal__justificativa">
+            <div *ngIf="nota.justificativa" class="nota-fiscal__justificativa">
               {{ nota.justificativa }}
             </div>
 
@@ -396,37 +337,27 @@
                 </div>
 
 
-                <button
-                  *ngIf="
+                <button *ngIf="
                     podeAdicionarEvidencia(e, nota) &&
                     formularioAnexoNotaId !== nota.id
-                  "
-                  type="button"
-                  class="btn btn--evidencia"
-                  (click)="abrirFormularioAnexo(nota)">
+                  " type="button" class="btn btn--evidencia" (click)="abrirFormularioAnexo(nota)">
                   + Adicionar evidência
                 </button>
 
               </div>
 
 
-              <div
-                *ngIf="carregandoAnexos[nota.id]"
-                class="evidencias__vazio">
+              <div *ngIf="carregandoAnexos[nota.id]" class="evidencias__vazio">
                 Carregando evidências...
               </div>
 
 
-              <div
-                *ngIf="
+              <div *ngIf="
                   !carregandoAnexos[nota.id] &&
                   anexosNota(nota).length > 0
-                "
-                class="evidencias__lista">
+                " class="evidencias__lista">
 
-                <div
-                  *ngFor="let anexo of anexosNota(nota)"
-                  class="evidencia-item">
+                <div *ngFor="let anexo of anexosNota(nota)" class="evidencia-item">
 
                   <div class="evidencia-item__conteudo">
 
@@ -446,51 +377,48 @@
 
                   </div>
 
-                  <button
-                    type="button"
-                    class="btn btn--arquivo"
-                    (click)="baixarAnexo(anexo)">
-                    Baixar
-                  </button>
+                  <div class="evidencia-item__acoes">
+
+                    <button *ngIf="authService.hasAnyRole(['ADMIN', 'OPERADOR'])" type="button" class="btn btn--arquivo"
+                      (click)="visualizarAnexo(anexo)">
+                      👁 Visualizar
+                    </button>
+
+                    <button type="button" class="btn btn--arquivo" (click)="baixarAnexo(anexo)">
+                      Baixar
+                    </button>
+
+                  </div>
 
                 </div>
 
               </div>
 
 
-              <div
-                *ngIf="
+              <div *ngIf="
                   !carregandoAnexos[nota.id] &&
                   anexosNota(nota).length === 0 &&
                   formularioAnexoNotaId !== nota.id
-                "
-                class="evidencias__vazio">
+                " class="evidencias__vazio">
                 Nenhuma evidência anexada a esta NF.
               </div>
 
 
-              <div
-                *ngIf="formularioAnexoNotaId === nota.id"
-                class="evidencia-form">
+              <div *ngIf="formularioAnexoNotaId === nota.id" class="evidencia-form">
 
                 <div class="campo">
 
-                  <label
-                    [for]="'tipo-anexo-' + nota.id">
+                  <label [for]="'tipo-anexo-' + nota.id">
                     Tipo da evidência
                   </label>
 
-                  <select
-                    [id]="'tipo-anexo-' + nota.id"
-                    [(ngModel)]="tipoAnexoSelecionado">
+                  <select [id]="'tipo-anexo-' + nota.id" [(ngModel)]="tipoAnexoSelecionado">
 
                     <option [ngValue]="null">
                       Selecione o tipo
                     </option>
 
-                    <option
-                      *ngFor="let tipo of tiposAnexo"
-                      [ngValue]="tipo.valor">
+                    <option *ngFor="let tipo of tiposAnexo" [ngValue]="tipo.valor">
                       {{ tipo.label }}
                     </option>
 
@@ -501,9 +429,7 @@
 
                 <div class="evidencia-form__arquivos">
 
-                  <label
-                    class="arquivo-opcao"
-                    [for]="'camera-anexo-' + nota.id">
+                  <label class="arquivo-opcao" [for]="'camera-anexo-' + nota.id">
 
                     <span class="arquivo-opcao__icone">
                       📷
@@ -516,19 +442,11 @@
 
                   </label>
 
-                  <input
-                    #cameraInput
-                    class="arquivo-input"
-                    type="file"
-                    [id]="'camera-anexo-' + nota.id"
-                    accept="image/jpeg,image/png"
-                    capture="environment"
-                    (change)="selecionarArquivoAnexo($event)">
+                  <input #cameraInput class="arquivo-input" type="file" [id]="'camera-anexo-' + nota.id"
+                    accept="image/jpeg,image/png" capture="environment" (change)="selecionarArquivoAnexo($event)">
 
 
-                  <label
-                    class="arquivo-opcao"
-                    [for]="'arquivo-anexo-' + nota.id">
+                  <label class="arquivo-opcao" [for]="'arquivo-anexo-' + nota.id">
 
                     <span class="arquivo-opcao__icone">
                       📁
@@ -541,20 +459,13 @@
 
                   </label>
 
-                  <input
-                    #arquivoInput
-                    class="arquivo-input"
-                    type="file"
-                    [id]="'arquivo-anexo-' + nota.id"
-                    accept="image/jpeg,image/png,application/pdf"
-                    (change)="selecionarArquivoAnexo($event)">
+                  <input #arquivoInput class="arquivo-input" type="file" [id]="'arquivo-anexo-' + nota.id"
+                    accept="image/jpeg,image/png,application/pdf" (change)="selecionarArquivoAnexo($event)">
 
                 </div>
 
 
-                <div
-                  *ngIf="arquivoAnexoSelecionado"
-                  class="arquivo-selecionado">
+                <div *ngIf="arquivoAnexoSelecionado" class="arquivo-selecionado">
 
                   <strong>
                     Arquivo selecionado:
@@ -569,40 +480,31 @@
                 </div>
 
 
-                <div
-                  *ngIf="
+                <div *ngIf="
                     erroAnexo &&
                     formularioAnexoNotaId === nota.id
-                  "
-                  class="feedback feedback--erro evidencia-form__feedback">
+                  " class="feedback feedback--erro evidencia-form__feedback">
                   {{ erroAnexo }}
                 </div>
 
 
                 <div class="resultado__acoes">
 
-                  <button
-                    type="button"
-                    class="btn"
-                    [disabled]="enviandoAnexoNotaId === nota.id"
+                  <button type="button" class="btn" [disabled]="enviandoAnexoNotaId === nota.id"
                     (click)="cancelarFormularioAnexo()">
                     Cancelar
                   </button>
 
-                  <button
-                    type="button"
-                    class="btn btn--primary"
-                    [disabled]="
+                  <button type="button" class="btn btn--primary" [disabled]="
                       !tipoAnexoSelecionado ||
                       !arquivoAnexoSelecionado ||
                       enviandoAnexoNotaId === nota.id
-                    "
-                    (click)="enviarAnexo(e, nota)">
+                    " (click)="enviarAnexo(e, nota)">
 
                     {{
-                      enviandoAnexoNotaId === nota.id
-                        ? 'Enviando...'
-                        : 'Enviar evidência'
+                    enviandoAnexoNotaId === nota.id
+                    ? 'Enviando...'
+                    : 'Enviar evidência'
                     }}
 
                   </button>
@@ -616,13 +518,10 @@
 
             <!-- RESULTADO DA NF -->
 
-            <div
-              *ngIf="podeRegistrarResultado(e, nota)"
-              class="resultado">
+            <div *ngIf="podeRegistrarResultado(e, nota)" class="resultado">
 
 
-              <ng-container
-                *ngIf="
+              <ng-container *ngIf="
                   formularioNota(nota) as formulario;
                   else escolherResultado
                 ">
@@ -639,26 +538,19 @@
                 </div>
 
 
-                <div
-                  *ngIf="exigeMotivoDevolucao(formulario)"
-                  class="campo">
+                <div *ngIf="exigeMotivoDevolucao(formulario)" class="campo">
 
-                  <label
-                    [for]="'motivo-devolucao-' + nota.id">
+                  <label [for]="'motivo-devolucao-' + nota.id">
                     Motivo
                   </label>
 
-                  <select
-                    [id]="'motivo-devolucao-' + nota.id"
-                    [(ngModel)]="formulario.motivoDevolucao">
+                  <select [id]="'motivo-devolucao-' + nota.id" [(ngModel)]="formulario.motivoDevolucao">
 
                     <option [ngValue]="null">
                       Selecione o motivo
                     </option>
 
-                    <option
-                      *ngFor="let motivo of motivosDevolucao"
-                      [ngValue]="motivo.valor">
+                    <option *ngFor="let motivo of motivosDevolucao" [ngValue]="motivo.valor">
                       {{ motivo.label }}
                     </option>
 
@@ -667,26 +559,19 @@
                 </div>
 
 
-                <div
-                  *ngIf="exigeMotivoNaoRealizacao(formulario)"
-                  class="campo">
+                <div *ngIf="exigeMotivoNaoRealizacao(formulario)" class="campo">
 
-                  <label
-                    [for]="'motivo-nao-realizacao-' + nota.id">
+                  <label [for]="'motivo-nao-realizacao-' + nota.id">
                     Motivo
                   </label>
 
-                  <select
-                    [id]="'motivo-nao-realizacao-' + nota.id"
-                    [(ngModel)]="formulario.motivoNaoRealizacao">
+                  <select [id]="'motivo-nao-realizacao-' + nota.id" [(ngModel)]="formulario.motivoNaoRealizacao">
 
                     <option [ngValue]="null">
                       Selecione o motivo
                     </option>
 
-                    <option
-                      *ngFor="let motivo of motivosNaoRealizacao"
-                      [ngValue]="motivo.valor">
+                    <option *ngFor="let motivo of motivosNaoRealizacao" [ngValue]="motivo.valor">
                       {{ motivo.label }}
                     </option>
 
@@ -695,19 +580,13 @@
                 </div>
 
 
-                <div
-                  *ngIf="formulario.status !== 'ENTREGUE'"
-                  class="campo">
+                <div *ngIf="formulario.status !== 'ENTREGUE'" class="campo">
 
-                  <label
-                    [for]="'justificativa-' + nota.id">
+                  <label [for]="'justificativa-' + nota.id">
                     Observação
                   </label>
 
-                  <textarea
-                    [id]="'justificativa-' + nota.id"
-                    [(ngModel)]="formulario.justificativa"
-                    rows="3"
+                  <textarea [id]="'justificativa-' + nota.id" [(ngModel)]="formulario.justificativa" rows="3"
                     placeholder="Informe detalhes adicionais, se necessário">
                   </textarea>
 
@@ -716,27 +595,20 @@
 
                 <div class="resultado__acoes">
 
-                  <button
-                    type="button"
-                    class="btn"
-                    [disabled]="salvandoNotaId === nota.id"
+                  <button type="button" class="btn" [disabled]="salvandoNotaId === nota.id"
                     (click)="cancelarResultado(nota)">
                     Cancelar
                   </button>
 
-                  <button
-                    type="button"
-                    class="btn btn--primary"
-                    [disabled]="
+                  <button type="button" class="btn btn--primary" [disabled]="
                       !podeConfirmarResultado(formulario) ||
                       salvandoNotaId === nota.id
-                    "
-                    (click)="confirmarResultado(nota)">
+                    " (click)="confirmarResultado(nota)">
 
                     {{
-                      salvandoNotaId === nota.id
-                        ? 'Registrando...'
-                        : 'Confirmar resultado'
+                    salvandoNotaId === nota.id
+                    ? 'Registrando...'
+                    : 'Confirmar resultado'
                     }}
 
                   </button>
@@ -754,30 +626,20 @@
 
                 <div class="resultado__opcoes">
 
-                  <button
-                    type="button"
-                    class="resultado-opcao resultado-opcao--sucesso"
+                  <button type="button" class="resultado-opcao resultado-opcao--sucesso"
                     (click)="selecionarResultado(nota, 'ENTREGUE')">
                     Entregue
                   </button>
 
-                  <button
-                    type="button"
-                    class="resultado-opcao"
-                    (click)="selecionarResultado(nota, 'ENTREGUE_PARCIAL')">
+                  <button type="button" class="resultado-opcao" (click)="selecionarResultado(nota, 'ENTREGUE_PARCIAL')">
                     Entregue parcialmente
                   </button>
 
-                  <button
-                    type="button"
-                    class="resultado-opcao"
-                    (click)="selecionarResultado(nota, 'DEVOLVIDA')">
+                  <button type="button" class="resultado-opcao" (click)="selecionarResultado(nota, 'DEVOLVIDA')">
                     Devolvida
                   </button>
 
-                  <button
-                    type="button"
-                    class="resultado-opcao resultado-opcao--problema"
+                  <button type="button" class="resultado-opcao resultado-opcao--problema"
                     (click)="selecionarResultado(nota, 'NAO_REALIZADA')">
                     Não realizada
                   </button>
@@ -810,27 +672,20 @@
          OCORRÊNCIA
          =================================================== -->
 
-    <section
-      *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'"
-      class="ocorrencia">
+    <section *ngIf="e.status === 'AGUARDANDO_RECEBIMENTO'" class="ocorrencia">
 
 
-      <div
-        *ngIf="sucessoOcorrencia"
-        class="feedback feedback--sucesso">
+      <div *ngIf="sucessoOcorrencia" class="feedback feedback--sucesso">
         {{ sucessoOcorrencia }}
       </div>
 
 
-      <div
-        *ngIf="erroOcorrencia"
-        class="feedback feedback--erro">
+      <div *ngIf="erroOcorrencia" class="feedback feedback--erro">
         {{ erroOcorrencia }}
       </div>
 
 
-      <ng-container
-        *ngIf="!formularioOcorrenciaAberto; else formularioOcorrencia">
+      <ng-container *ngIf="!formularioOcorrenciaAberto; else formularioOcorrencia">
 
 
         <div class="ocorrencia__cabecalho">
@@ -849,10 +704,7 @@
           </div>
 
 
-          <button
-            type="button"
-            class="btn btn--warning"
-            (click)="abrirFormularioOcorrencia()">
+          <button type="button" class="btn btn--warning" (click)="abrirFormularioOcorrencia()">
             ⚠ Registrar ocorrência
           </button>
 
@@ -881,17 +733,13 @@
               Motivo da ocorrência
             </label>
 
-            <select
-              id="motivo-ocorrencia"
-              [(ngModel)]="motivoOcorrencia">
+            <select id="motivo-ocorrencia" [(ngModel)]="motivoOcorrencia">
 
               <option [ngValue]="null">
                 Selecione o motivo
               </option>
 
-              <option
-                *ngFor="let motivo of motivosOcorrencia"
-                [ngValue]="motivo.valor">
+              <option *ngFor="let motivo of motivosOcorrencia" [ngValue]="motivo.valor">
                 {{ motivo.label }}
               </option>
 
@@ -906,10 +754,7 @@
               Observação
             </label>
 
-            <textarea
-              id="observacao-ocorrencia"
-              [(ngModel)]="observacaoOcorrencia"
-              rows="3"
+            <textarea id="observacao-ocorrencia" [(ngModel)]="observacaoOcorrencia" rows="3"
               placeholder="Informe detalhes adicionais, se necessário">
             </textarea>
 
@@ -918,27 +763,19 @@
 
           <div class="resultado__acoes">
 
-            <button
-              type="button"
-              class="btn"
-              [disabled]="registrandoOcorrencia"
-              (click)="cancelarOcorrencia()">
+            <button type="button" class="btn" [disabled]="registrandoOcorrencia" (click)="cancelarOcorrencia()">
               Cancelar
             </button>
 
-            <button
-              type="button"
-              class="btn btn--warning"
-              [disabled]="
+            <button type="button" class="btn btn--warning" [disabled]="
                 !motivoOcorrencia ||
                 registrandoOcorrencia
-              "
-              (click)="registrarOcorrencia()">
+              " (click)="registrarOcorrencia()">
 
               {{
-                registrandoOcorrencia
-                  ? 'Registrando...'
-                  : 'Confirmar ocorrência'
+              registrandoOcorrencia
+              ? 'Registrando...'
+              : 'Confirmar ocorrência'
               }}
 
             </button>
@@ -1032,9 +869,7 @@
         #{{ numeroEntrega }} neste manifesto.
       </p>
 
-      <button
-        class="btn"
-        (click)="voltar()">
+      <button class="btn" (click)="voltar()">
         Voltar
       </button>
 
@@ -1043,3 +878,13 @@
   </ng-template>
 
 </div>
+
+<app-visualizador-evidencia
+  [visualizandoAnexo]="visualizandoAnexo"
+  [carregandoVisualizacao]="carregandoVisualizacao"
+  [nomeVisualizacaoAnexo]="nomeVisualizacaoAnexo"
+  [tipoVisualizacaoAnexo]="tipoVisualizacaoAnexo"
+  [urlVisualizacaoAnexo]="urlVisualizacaoAnexo"
+  [urlVisualizacaoPdf]="urlVisualizacaoPdf"
+  (fechar)="fecharVisualizacaoAnexo()">
+</app-visualizador-evidencia>

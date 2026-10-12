@@ -1,0 +1,33 @@
+<!-- MODAL DE VISUALIZAÇÃO DE EVIDÊNCIAS -->
+<div *ngIf="visualizandoAnexo" class="visualizacao-overlay" role="dialog" aria-modal="true"
+  aria-label="Visualização de evidência">
+
+  <div class="visualizacao-modal">
+
+    <div class="visualizacao-header">
+      <strong>{{ nomeVisualizacaoAnexo }}</strong>
+
+      <button type="button" class="btn" (click)="fecharVisualizacaoAnexo()">
+        ✕ Fechar
+      </button>
+    </div>
+
+    <div class="visualizacao-conteudo">
+
+      <p *ngIf="carregandoVisualizacao">
+        Carregando evidência...
+      </p>
+
+      <img *ngIf="!carregandoVisualizacao &&
+               tipoVisualizacaoAnexo === 'imagem' &&
+               urlVisualizacaoAnexo" [src]="urlVisualizacaoAnexo" alt="Evidência da entrega"
+        class="visualizacao-imagem">
+
+      <iframe *ngIf="!carregandoVisualizacao &&
+               tipoVisualizacaoAnexo === 'pdf' &&
+               urlVisualizacaoAnexo" [src]="urlVisualizacaoPdf" title="Visualização do PDF" class="visualizacao-pdf">
+      </iframe>
+
+    </div>
+  </div>
+</div>

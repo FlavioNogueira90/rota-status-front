@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { VisualizadorEvidenciaComponent } from '../../components/visualizador-evidencia/visualizador-evidencia.component';
 import {
   ActivatedRoute,
   Router,
@@ -54,7 +56,8 @@ interface FormularioResultadoNota {
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    VisualizadorEvidenciaComponent
   ],
   templateUrl: './entrega-detalhe.component.html',
   styleUrls: ['./entrega-detalhe.component.scss']
@@ -64,7 +67,8 @@ export class EntregaDetalheComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly entregasService = inject(EntregasService);
-  private readonly authService = inject(AuthService);
+  readonly authService = inject(AuthService);
+  private readonly sanitizer = inject(DomSanitizer);
 
 
   numeroManifesto =
@@ -101,6 +105,14 @@ export class EntregaDetalheComponent {
 
   sucessoAnexo = '';
 
+  // Controle da visualização de evidências
+  visualizandoAnexo = false;
+  carregandoVisualizacao = false;
+  urlVisualizacaoAnexo: string | null = null;
+  urlVisualizacaoPdf: SafeResourceUrl | null = null;
+  nomeVisualizacaoAnexo = '';
+  tipoVisualizacaoAnexo: 'imagem' | 'pdf' | null = null;
+  private visualizacaoRequestId = 0;
 
   readonly tiposAnexo: {
     valor: TipoEntregaAnexo;
@@ -589,6 +601,81 @@ export class EntregaDetalheComponent {
       });
   }
 
+  visualizarAnexo(anexo: EntregaAnexo): void {
+    if (!this.authService.hasAnyRole(['ADMIN', 'OPERADOR'])) {
+      return;
+    }
+
+    this.fecharVisualizacaoAnexo();
+    const requestId = ++this.visualizacaoRequestId;
+    this.visualizandoAnexo = true;
+    this.carregandoVisualizacao = true;
+    this.nomeVisualizacaoAnexo = anexo.nomeArquivo;
+    this.erroAnexo = '';
+
+    this.entregasService.baixarAnexo(anexo.id).subscribe({
+      next: (arquivo: Blob) => {
+        if (!this.visualizandoAnexo || requestId !== this.visualizacaoRequestId) {
+          return;
+        }
+
+        const nome = anexo.nomeArquivo.toLowerCase();
+
+        if (arquivo.type === 'application/pdf' || nome.endsWith('.pdf')) {
+          this.tipoVisualizacaoAnexo = 'pdf';
+        } else if (
+          arquivo.type === 'image/jpeg' ||
+          arquivo.type === 'image/png' ||
+          nome.endsWith('.jpg') ||
+          nome.endsWith('.jpeg') ||
+          nome.endsWith('.png')
+        ) {
+          this.tipoVisualizacaoAnexo = 'imagem';
+        } else {
+          this.erroAnexo = 'Formato não disponível para visualização.';
+          this.fecharVisualizacaoAnexo();
+          return;
+        }
+
+        this.urlVisualizacaoAnexo = URL.createObjectURL(arquivo);
+        if (this.tipoVisualizacaoAnexo === 'pdf') {
+          this.urlVisualizacaoPdf =
+            this.sanitizer.bypassSecurityTrustResourceUrl(
+              this.urlVisualizacaoAnexo
+            );
+        }
+        this.carregandoVisualizacao = false;
+      },
+
+      error: (erro) => {
+        if (requestId !== this.visualizacaoRequestId) {
+          return;
+        }
+        console.error('Erro ao visualizar evidência:', erro);
+
+        this.fecharVisualizacaoAnexo();
+
+        this.erroAnexo =
+          erro?.error?.message ||
+          erro?.error?.mensagem ||
+          'Não foi possível visualizar a evidência.';
+      }
+    });
+  }
+
+  fecharVisualizacaoAnexo(): void {
+    if (this.urlVisualizacaoAnexo) {
+      URL.revokeObjectURL(this.urlVisualizacaoAnexo);
+    }
+
+    this.visualizacaoRequestId++;
+    this.urlVisualizacaoAnexo = null;
+    this.urlVisualizacaoPdf = null;
+    this.visualizandoAnexo = false;
+    this.carregandoVisualizacao = false;
+    this.nomeVisualizacaoAnexo = '';
+    this.tipoVisualizacaoAnexo = null;
+  }
 
   tipoAnexoLabel(
     tipo: TipoEntregaAnexo
