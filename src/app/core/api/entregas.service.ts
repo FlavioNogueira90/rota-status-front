@@ -285,6 +285,24 @@ export class EntregasService {
     );
   }
 
+  obterUrlVisualizacao(
+    anexoId: string
+  ): Observable<string | null> {
+
+    return this.http.get(
+      `${this.baseUrl}/entregas/anexos/${anexoId}/visualizacao`,
+      {
+        responseType: 'text',
+        observe: 'response'
+      }
+    ).pipe(
+      map(response =>
+        response.status === 204
+          ? null
+          : response.body
+      )
+    );
+  }
 
   baixarAnexo(
     anexoId: string

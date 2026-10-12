@@ -607,64 +607,121 @@ export class EntregaDetalheComponent {
     }
 
     this.fecharVisualizacaoAnexo();
+
     const requestId = ++this.visualizacaoRequestId;
+
     this.visualizandoAnexo = true;
     this.carregandoVisualizacao = true;
     this.nomeVisualizacaoAnexo = anexo.nomeArquivo;
     this.erroAnexo = '';
 
-    this.entregasService.baixarAnexo(anexo.id).subscribe({
-      next: (arquivo: Blob) => {
-        if (!this.visualizandoAnexo || requestId !== this.visualizacaoRequestId) {
-          return;
-        }
+    const nome = anexo.nomeArquivo.toLowerCase();
 
-        const nome = anexo.nomeArquivo.toLowerCase();
+    if (nome.endsWith('.pdf')) {
+      this.tipoVisualizacaoAnexo = 'pdf';
+    } else if (/\.(jpg|jpeg|png)$/.test(nome)) {
+      this.tipoVisualizacaoAnexo = 'imagem';
+    } else {
+      this.fecharVisualizacaoAnexo();
+      this.erroAnexo = 'Formato não disponível para visualização.';
+      return;
+    }
 
-        if (arquivo.type === 'application/pdf' || nome.endsWith('.pdf')) {
-          this.tipoVisualizacaoAnexo = 'pdf';
-        } else if (
-          arquivo.type === 'image/jpeg' ||
-          arquivo.type === 'image/png' ||
-          nome.endsWith('.jpg') ||
-          nome.endsWith('.jpeg') ||
-          nome.endsWith('.png')
-        ) {
-          this.tipoVisualizacaoAnexo = 'imagem';
-        } else {
-          this.erroAnexo = 'Formato não disponível para visualização.';
+    const requisicaoAtual = () =>
+      this.visualizandoAnexo &&
+      requestId === this.visualizacaoRequestId;
+
+    // DEV: utiliza o download autenticado já existente.
+    const carregarPeloBackend = () => {
+      this.entregasService.baixarAnexo(anexo.id).subscribe({
+        next: (arquivo: Blob) => {
+          if (!requisicaoAtual()) {
+            return;
+          }
+
+          this.urlVisualizacaoAnexo = URL.createObjectURL(arquivo);
+
+          if (this.tipoVisualizacaoAnexo === 'pdf') {
+            this.urlVisualizacaoPdf =
+              this.sanitizer.bypassSecurityTrustResourceUrl(
+                this.urlVisualizacaoAnexo
+              );
+          }
+
+          this.carregandoVisualizacao = false;
+        },
+        error: (erro) => {
+          if (!requisicaoAtual()) {
+            return;
+          }
+
+          console.error('Erro ao carregar evidência:', erro);
           this.fecharVisualizacaoAnexo();
+          this.erroAnexo = 'Não foi possível visualizar a evidência.';
+        }
+      });
+    };
+
+    // PROD: solicita uma URL temporária após autorização.
+    this.entregasService.obterUrlVisualizacao(anexo.id).subscribe({
+      next: (url) => {
+        if (!requisicaoAtual()) {
           return;
         }
 
-        this.urlVisualizacaoAnexo = URL.createObjectURL(arquivo);
+        // DEV retorna 204, portanto utiliza o backend.
+        if (!url) {
+          carregarPeloBackend();
+          return;
+        }
+
+        // Aceita somente HTTPS do Azure Blob Storage.
+        let endereco: URL;
+
+        try {
+          endereco = new URL(url);
+        } catch {
+          this.fecharVisualizacaoAnexo();
+          this.erroAnexo = 'URL de visualização inválida.';
+          return;
+        }
+
+        if (
+          endereco.protocol !== 'https:' ||
+          !endereco.hostname.endsWith('.blob.core.windows.net')
+        ) {
+          this.fecharVisualizacaoAnexo();
+          this.erroAnexo = 'Origem da evidência não permitida.';
+          return;
+        }
+
+        this.urlVisualizacaoAnexo = url;
+
         if (this.tipoVisualizacaoAnexo === 'pdf') {
           this.urlVisualizacaoPdf =
-            this.sanitizer.bypassSecurityTrustResourceUrl(
-              this.urlVisualizacaoAnexo
-            );
+            this.sanitizer.bypassSecurityTrustResourceUrl(url);
         }
+
         this.carregandoVisualizacao = false;
       },
 
       error: (erro) => {
-        if (requestId !== this.visualizacaoRequestId) {
+        if (!requisicaoAtual()) {
           return;
         }
-        console.error('Erro ao visualizar evidência:', erro);
 
+        console.error('Erro ao obter URL de visualização:', erro);
         this.fecharVisualizacaoAnexo();
 
+        // Não contorna falhas de autorização.
         this.erroAnexo =
-          erro?.error?.message ||
-          erro?.error?.mensagem ||
-          'Não foi possível visualizar a evidência.';
+          'Não foi possível autorizar a visualização da evidência.';
       }
     });
   }
 
   fecharVisualizacaoAnexo(): void {
-    if (this.urlVisualizacaoAnexo) {
+    if (this.urlVisualizacaoAnexo?.startsWith('blob:')) {
       URL.revokeObjectURL(this.urlVisualizacaoAnexo);
     }
 
