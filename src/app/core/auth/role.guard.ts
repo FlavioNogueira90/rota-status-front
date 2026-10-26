@@ -1,5 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
+
 import { AuthService } from './auth.service';
 import { Role } from './auth.models';
 
@@ -10,15 +11,38 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const allowedRoles = (route.data?.['roles'] ?? []) as Role[];
 
   if (!auth.isLogged()) {
-    router.navigateByUrl('/login');
-    return false;
+    return router.createUrlTree(['/login']);
   }
 
-  // se ainda não carregou /me, deixa passar (a gente garante no app init)
-  if (!auth.me()) return true;
+  const user = auth.me();
 
-  if (allowedRoles.length === 0 || auth.hasAnyRole(allowedRoles)) return true;
+  // Sem identidade conhecida, não concedemos acesso.
+  if (!user) {
+    return router.createUrlTree(['/login']);
+  }
 
-  router.navigateByUrl('/forbidden');
-  return false;
+  // Identidade recuperada localmente, ainda não validada nesta execução.
+  if (!auth.sessionValidated()) {
+
+    // Acesso provisório apenas à experiência do motorista.
+    if (
+      user.role === 'MOTORISTA' &&
+      allowedRoles.includes('MOTORISTA')
+    ) {
+      return true;
+    }
+
+    // Não liberar telas administrativas com identidade não validada.
+    return router.createUrlTree(['/home']);
+  }
+
+  // Sessão validada: aplicar permissões normalmente.
+  if (
+    allowedRoles.length === 0 ||
+    auth.hasAnyRole(allowedRoles)
+  ) {
+    return true;
+  }
+
+  return router.createUrlTree(['/forbidden']);
 };
