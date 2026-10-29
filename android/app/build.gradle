@@ -3,39 +3,60 @@ apply plugin: 'com.android.application'
 android {
     namespace "com.fantech.rotaone"
     compileSdk rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "com.fantech.rotaone"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         aaptOptions {
-             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+
+    signingConfigs {
+        release {
+            def storePath = project.findProperty("ROTAONE_RELEASE_STORE_FILE")
+            def storePasswordValue = project.findProperty("ROTAONE_RELEASE_STORE_PASSWORD")
+            def keyAliasValue = project.findProperty("ROTAONE_RELEASE_KEY_ALIAS")
+            def keyPasswordValue = project.findProperty("ROTAONE_RELEASE_KEY_PASSWORD")
+
+            if (storePath && storePasswordValue && keyAliasValue && keyPasswordValue) {
+                storeFile file(storePath)
+                storePassword storePasswordValue.toString()
+                keyAlias keyAliasValue.toString()
+                keyPassword keyPasswordValue.toString()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+
             minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
-        flavorDimensions "environment"
+    flavorDimensions "environment"
 
     productFlavors {
-    dev {
-        dimension "environment"
-        applicationIdSuffix ".dev"
-        versionNameSuffix "-dev"
-    }
+        dev {
+            dimension "environment"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
 
-    prod {
-        dimension "environment"
+        prod {
+            dimension "environment"
+        }
     }
-}
 }
 
 repositories {

@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:rota-status-front": "node dist/rota-status-front/server/server.mjs"
+    "serve:ssr:rota-status-front": "node dist/rota-status-front/server/server.mjs",
+    "android:dev": "ng build --configuration android-dev && cap sync android && cd android && gradlew.bat :app:assembleDevDebug",
+    "android:prod": "ng build --configuration android && cap sync android && cd android && gradlew.bat :app:assembleProdRelease"
   },
   "private": true,
   "dependencies": {
