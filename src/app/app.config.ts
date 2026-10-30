@@ -12,6 +12,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 
+
 export function initAuth(auth: AuthService) {
   return async () => {
     if (!TokenStorage.isLogged()) {
