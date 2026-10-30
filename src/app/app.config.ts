@@ -5,10 +5,12 @@ import { firstValueFrom, timeout } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { authInterceptor } from  './core/auth/auth.interceptor';
+import { authInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
 import { TokenStorage } from './core/auth/token.storage';
 import { provideServiceWorker } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 
 
 export function initAuth(auth: AuthService) {
@@ -55,14 +57,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     // ✅ Carrega /auth/me ao iniciar (se existir token)
     {
-        provide: APP_INITIALIZER,
-        useFactory: initAuth,
-        deps: [AuthService],
-        multi: true
+      provide: APP_INITIALIZER,
+      useFactory: initAuth,
+      deps: [AuthService],
+      multi: true
     },
     provideServiceWorker('ngsw-worker.js', {
-        enabled: !isDevMode(),
-        registrationStrategy: 'registerWhenStable:30000'
+      enabled: environment.serviceWorker && !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
     })
-]
+  ]
 };
